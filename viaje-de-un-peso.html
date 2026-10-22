@@ -1,0 +1,634 @@
+<title>El Viaje de un Peso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(var(--border) / <alpha-value>)',
+          input: 'hsl(var(--input) / <alpha-value>)',
+          ring: 'hsl(var(--ring) / <alpha-value>)',
+          background: 'hsl(var(--background) / <alpha-value>)',
+          foreground: 'hsl(var(--foreground) / <alpha-value>)',
+          primary: { DEFAULT: 'hsl(var(--primary) / <alpha-value>)', foreground: 'hsl(var(--primary-foreground) / <alpha-value>)' },
+          secondary: { DEFAULT: 'hsl(var(--secondary) / <alpha-value>)', foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)' },
+          muted: { DEFAULT: 'hsl(var(--muted) / <alpha-value>)', foreground: 'hsl(var(--muted-foreground) / <alpha-value>)' },
+          accent: { DEFAULT: 'hsl(var(--accent) / <alpha-value>)', foreground: 'hsl(var(--accent-foreground) / <alpha-value>)' },
+          popover: { DEFAULT: 'hsl(var(--popover) / <alpha-value>)', foreground: 'hsl(var(--popover-foreground) / <alpha-value>)' },
+          card: { DEFAULT: 'hsl(var(--card) / <alpha-value>)', foreground: 'hsl(var(--card-foreground) / <alpha-value>)' }
+        },
+        borderColor: { DEFAULT: 'hsl(var(--border))' },
+        borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' },
+        fontFamily: {
+          sans: ['Geist', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+          mono: ['"Geist Mono"', 'ui-monospace', 'Consolas', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+<style>
+/* Layout: shadcn/ui (tema zinc, Geist). Escenario fijo a la derecha con cuadros que se reordenan; pasos mínimos a la izquierda que avanzan con el scroll */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 10% 3.9%;
+  --radius: 0.625rem;
+  /* series validadas (daltonismo) */
+  --c-general: #2a78d6;
+  --c-bonif: #eb6834;
+  --c-sep: #1baf7a;
+  --c-pie: #eda100;
+  --c-otros: #a3a29b;
+  --c-sueldos: #6250d6;
+  --c-compras: #008300;
+  --c-honor: #e87ba4;
+  --neg: #c62f2f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: 240 10% 3.9%; --foreground: 0 0% 98%;
+    --card: 240 6% 7%; --card-foreground: 0 0% 98%;
+    --popover: 240 6% 7%; --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%; --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%; --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%; --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%; --accent-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%; --input: 240 3.7% 15.9%; --ring: 240 4.9% 83.9%;
+    --c-general: #3987e5; --c-bonif: #d95926; --c-sep: #199e70; --c-pie: #c98500; --c-otros: #6f6e69;
+    --c-sueldos: #9085e9; --c-compras: #008300; --c-honor: #d55181;
+    --neg: #f07171;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --background: 240 10% 3.9%; --foreground: 0 0% 98%;
+  --card: 240 6% 7%; --card-foreground: 0 0% 98%;
+  --popover: 240 6% 7%; --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%; --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%; --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%; --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%; --accent-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%; --input: 240 3.7% 15.9%; --ring: 240 4.9% 83.9%;
+  --c-general: #3987e5; --c-bonif: #d95926; --c-sep: #199e70; --c-pie: #c98500; --c-otros: #6f6e69;
+  --c-sueldos: #9085e9; --c-compras: #008300; --c-honor: #d55181;
+  --neg: #f07171;
+  color-scheme: dark;
+}
+html { scroll-behavior: smooth; }
+body { background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: hsl(var(--background)); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; }
+.stage-sticky { position: sticky; top: calc(56px + env(safe-area-inset-top, 0px)); }
+@media (min-width: 1024px) { .stage-sticky { top: calc(80px + env(safe-area-inset-top, 0px)); } }
+.viz { position: relative; height: clamp(240px, 40vh, 460px); }
+@media (min-width: 1024px) { .viz { height: max(340px, min(470px, calc(100vh - 270px))); } }
+.neg { color: var(--neg); }
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+.sq { position: absolute; left: 0; top: 0; width: 40px; height: 40px; border-radius: 7px; transform-origin: 0 0;
+  transition: transform .8s cubic-bezier(.65,0,.35,1), background-color .55s ease, opacity .45s ease; }
+.sq:hover { filter: brightness(1.12); }
+.limit { position: absolute; height: 2px; background: hsl(var(--foreground)); border-radius: 1px; transition: opacity .4s ease; }
+.limit span { position: absolute; left: calc(100% + 8px); top: -9px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.frame { position: absolute; border: 1.5px solid; border-radius: 6px; transition: opacity .5s ease; overflow: hidden; }
+.frame i { position: absolute; inset: 0; opacity: .1; }
+.col-label { position: absolute; transform: translateX(-50%); font-size: 12px; color: hsl(var(--muted-foreground)); white-space: nowrap; transition: opacity .5s ease; }
+.chart { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 14px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .45s ease, transform .45s ease; }
+.chart.on { opacity: 1; transform: none; pointer-events: auto; transition-delay: .2s; }
+.bar-over::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 14%; background: repeating-linear-gradient(135deg, hsl(var(--background) / .6) 0 2px, transparent 2px 6px); }
+#tip { position: fixed; z-index: 60; pointer-events: none; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: 12px; line-height: 1.35; padding: 6px 10px; border-radius: 6px; max-width: 240px; transform: translate(-50%, calc(-100% - 8px)); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sq, .limit, .frame, .col-label, .chart { transition: none !important; }
+}
+</style>
+
+<div id="root"></div>
+<div id="tip" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+(function () {
+  const { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } = React;
+  const html = htm.bind(React.createElement);
+  const cn = (...a) => a.filter(Boolean).join(' ');
+  const nf1 = new Intl.NumberFormat('es-CL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const mm = v => '$' + nf1.format(v / 1e6) + ' MM';
+  const mmS = v => (v < 0 ? '−' : '+') + '$' + nf1.format(Math.abs(v) / 1e6) + ' MM';
+  const pc = v => nf1.format(v) + '%';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- datos (cuadro al 30-09-2026) ---------------- */
+  const FONDOS = ['general', 'bonif', 'sep', 'pie', 'otros'];
+  const TIPOS = ['sueldos', 'compras', 'honor'];
+  const NAME = { general: 'Subvención General', bonif: 'Bonificaciones', sep: 'SEP', pie: 'PIE', otros: 'Otros fondos', mant: 'Mantenimiento',
+    sueldos: 'Sueldos', compras: 'Compras', honor: 'Honorarios' };
+  const SHORT = { general: 'General', bonif: 'Bonif.', sep: 'SEP', pie: 'PIE', otros: 'Otros' };
+  const COLOR = k => 'var(--c-' + (k === 'mant' ? 'otros' : k) + ')';
+
+  const DATA = {
+    esc: {
+      key: 'esc', short: 'El Melocotón', badge: 'RBD 10529', title: 'Escuela Básica F‑N° 638 El Melocotón',
+      ingresos: 384548849, gastos: 423891184, saldo: -39342335, saldoLabel: 'Saldo',
+      per100: '110,2', ratioGeneral: '2,7×',
+      incomeUnits: { general: 34, bonif: 35, sep: 17, pie: 13, otros: 1 },
+      incomeShare: { general: 34.09, bonif: 35.47, sep: 16.72, pie: 13.0, otros: 0.72 },
+      incomeMM: { general: 131111723, bonif: 136390180, sep: 64282967, pie: 50010253, otros: 2753726 },
+      typeMM: { sueldos: 349508561, compras: 71722506, honor: 2660117 },
+      typePer100: { sueldos: '90,9', compras: '18,7', honor: '0,7' },
+      fondoUnits: { general: { sueldos: 75, compras: 17, honor: 0 }, bonif: { sueldos: 0, compras: 0, honor: 0 }, sep: { sueldos: 5, compras: 1, honor: 0 }, pie: { sueldos: 11, compras: 0, honor: 0 }, otros: { sueldos: 0, compras: 0, honor: 1 } },
+      fondoGasto: { general: 356699308, bonif: 0, sep: 21786940, pie: 44213871, otros: 1191065 },
+      exec: [['sep', 33.89], ['pie', 88.41], ['general', 272.06], ['mant', 58.57]],
+      compare: [['Sueldos / ingresos', 90.89, 104.38], ['Ejecución total', 110.23, 122.63], ['Ejecución SEP', 33.89, 46.72], ['Ejecución PIE', 88.41, 115.74]],
+      saldos: [['Bonificaciones', 136390180, 'bonif'], ['SEP', 42496027, 'sep'], ['PIE', 5796382, 'pie'], ['Mantenimiento', 842461, 'otros'], ['Pro Retención', 720200, 'otros'], ['General', -225587585, 'general']],
+      table: [
+        ['SEP', 64282967, 3705783, 768584, 17312573, 21786940, 42496027],
+        ['PIE', 50010253, 40761, 213151, 43959959, 44213871, 5796382],
+        ['General', 131111723, 67913279, 550000, 288236029, 356699308, -225587585],
+        ['Bonificaciones e incrementos', 136390180, 0, 0, 0, 0, 136390180],
+        ['Pro Retención', 720200, 0, 0, 0, 0, 720200],
+        ['Mantenimiento', 2033526, 62683, 1128382, 0, 1191065, 842461],
+        ['FAEP 2025', 0, 0, 0, 0, 0, 0],
+        ['Reactivación', 0, 0, 0, 0, 0, 0],
+        ['Total', 384548849, 71722506, 2660117, 349508561, 423891184, -39342335]
+      ]
+    },
+    red: {
+      key: 'red', short: 'Toda la red', badge: 'AP', title: 'Administración Provisional San José de Maipo',
+      ingresos: 4054301924, gastos: 4971669021, saldo: -28342797, saldoLabel: 'Saldo informado',
+      per100: '122,6', ratioGeneral: '2,3×',
+      incomeUnits: { general: 41, bonif: 28, sep: 17, pie: 12, otros: 2 },
+      incomeShare: { general: 41.31, bonif: 28.36, sep: 17.42, pie: 11.49, otros: 1.42 },
+      incomeMM: { general: 1674904108, bonif: 1149712886, sep: 706204442, pie: 465858812, otros: 57621676 },
+      typeMM: { sueldos: 4232026928, compras: 659329719, honor: 80312374 },
+      typePer100: { sueldos: '104,4', compras: '16,3', honor: '2,0' },
+      fondoUnits: { general: { sueldos: 77, compras: 15, honor: 2 }, bonif: { sueldos: 5, compras: 0, honor: 0 }, sep: { sueldos: 7, compras: 1, honor: 0 }, pie: { sueldos: 13, compras: 0, honor: 0 }, otros: { sueldos: 3, compras: 0, honor: 0 } },
+      fondoGasto: { general: 3797021216, bonif: 178490782, sep: 329973960, pie: 539165483, otros: 127017580 },
+      exec: [['sep', 46.72], ['pie', 115.74], ['general', 226.70], ['mant', 16.37]],
+      compare: null,
+      saldos: [['Bonificaciones', 1001265589, 'bonif'], ['SEP', 393713156, 'sep'], ['Pro Retención', 26445165, 'otros'], ['Mantenimiento', 26072927, 'otros'], ['FAEP 2025', 24000000, 'otros'], ['Reactivación', 1661583, 'otros'], ['PIE', -70497745, 'pie'], ['General', -1431003472, 'general']],
+      table: [
+        ['SEP', 706204442, 41904354, 4465097, 283604509, 329973960, 393713156],
+        ['PIE', 465858812, 506864, 1651917, 537006702, 539165483, -70497745],
+        ['General', 1674904108, 615579079, 62499848, 3118942289, 3797021216, -1431003472],
+        ['Bonificaciones e incrementos', 1149712886, 0, 0, 178490782, 178490782, 1001265589],
+        ['Pro Retención', 26445165, 0, 0, 0, 0, 26445165],
+        ['Mantenimiento', 31176511, 833672, 4269912, 0, 5103584, 26072927],
+        ['FAEP 2025', 0, 0, 0, 100269539, 100269539, 24000000],
+        ['Reactivación', 0, 505750, 7425600, 13713107, 21644457, 1661583],
+        ['Total', 4054301924, 659329719, 80312374, 4232026928, 4971669021, -28342797]
+      ]
+    }
+  };
+
+  function stepsFor(d) {
+    const s = [
+      { id: 'ingresos', kicker: 'Ingresos', value: mm(d.ingresos), line: 'enero a septiembre 2026' },
+      { id: 'gastos', kicker: 'Gastos', value: '$' + d.per100, line: 'por cada $100 recibidos' },
+      { id: 'fondos', kicker: 'Subvención General', value: d.ratioGeneral, line: 'gasto sobre su ingreso' },
+      { id: 'ejecucion', kicker: 'Ejecución SEP', value: pc(d.exec[0][1]), line: 'con 75% del año transcurrido' }
+    ];
+    if (d.compare) s.push({ id: 'red', kicker: 'Frente a la red', value: pc(d.compare[0][1]), line: 'sueldos / ingresos · red ' + pc(d.compare[0][2]) });
+    s.push({ id: 'saldo', kicker: d.saldoLabel, value: mmS(d.saldo), line: 'al 30 de septiembre', neg: d.saldo < 0 });
+    return s;
+  }
+
+  /* ---------------- cuadros: identidad y posiciones ---------------- */
+  const G = 3, BASE = 40;
+  function buildSquares(d) {
+    const sq = [];
+    TIPOS.forEach(t => FONDOS.forEach(f => { for (let i = 0; i < d.fondoUnits[f][t]; i++) sq.push({ t, f }); }));
+    let i = 0;
+    FONDOS.forEach(f => { for (let k = 0; k < d.incomeUnits[f]; k++) { if (sq[i]) sq[i].src = f; i++; } });
+    return sq;
+  }
+  function gridLayout(n, W, H) {
+    const rows = Math.ceil(n / 10), lim = 16;
+    const s = Math.max(4, Math.floor(Math.min((W - 9 * G - 48) / 10, (H - (rows - 1) * G - lim) / rows)));
+    const gw = 10 * s + 9 * G, gh = rows * s + (rows - 1) * G + lim;
+    const x0 = Math.round((W - gw) / 2), y0 = Math.max(0, Math.round((H - gh) / 2));
+    return { s, x0, gw, limitY: y0 + 10 * (s + G) - G + lim / 2 - 1,
+      pos: i => ({ x: x0 + (i % 10) * (s + G), y: y0 + Math.floor(i / 10) * (s + G) + (i >= 100 ? lim : 0), s }) };
+  }
+  function colLayout(d, sq, W, H) {
+    const w = 4, labelH = 24, colGap = W < 420 ? 10 : 18;
+    const counts = {}; FONDOS.forEach(f => { counts[f] = 0; });
+    sq.forEach(q => { counts[q.f]++; });
+    const rows = Math.max(...FONDOS.map(f => Math.max(Math.ceil(counts[f] / w), d.incomeShare[f] / w)));
+    const s = Math.max(3, Math.floor(Math.min((W - 4 * colGap) / (5 * w) - G, (H - labelH - 10) / rows - G)));
+    const colW = w * (s + G) - G, totalW = 5 * colW + 4 * colGap;
+    const x0 = Math.round((W - totalW) / 2), base = H - labelH;
+    const idx = {}; FONDOS.forEach(f => { idx[f] = 0; });
+    const pos = sq.map(q => {
+      const c = FONDOS.indexOf(q.f), k = idx[q.f]++;
+      return { x: x0 + c * (colW + colGap) + (k % w) * (s + G), y: base - (Math.floor(k / w) + 1) * (s + G) + G, s };
+    });
+    const cols = FONDOS.map((f, c) => ({ f, x: x0 + c * (colW + colGap), w: colW, h: d.incomeShare[f] / w * (s + G), base }));
+    return { pos, cols };
+  }
+
+  /* ---------------- ui (estilo shadcn) ---------------- */
+  const ICON = {
+    search: html`<circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>`,
+    chevrons: html`<path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path>`,
+    check: html`<path d="M20 6 9 17l-5-5"></path>`,
+    table: html`<path d="M12 3v18"></path><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path>`,
+    play: html`<polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>`,
+    pause: html`<rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"></rect><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"></rect>`,
+    down: html`<path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path>`,
+    x: html`<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>`
+  };
+  const Icon = ({ name, className = 'h-4 w-4' }) => html`<svg className=${className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
+
+  const BTN = {
+    base: 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+    default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
+    outline: 'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
+    ghost: 'hover:bg-accent hover:text-accent-foreground',
+    md: 'h-9 px-4 py-2', sm: 'h-8 px-3 text-xs'
+  };
+  const Button = ({ variant = 'default', size = 'md', className, children, ...p }) =>
+    html`<button type="button" className=${cn(BTN.base, BTN[variant], BTN[size], className)} ...${p}>${children}</button>`;
+  const Badge = ({ variant = 'outline', className, children }) =>
+    html`<span className=${cn('inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
+      variant === 'secondary' ? 'border-transparent bg-secondary text-secondary-foreground' : 'text-foreground', className)}>${children}</span>`;
+
+  /* ---------------- selector de establecimiento ---------------- */
+  function ScopeSelect({ scope, onPick }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+    useEffect(() => {
+      const out = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+      const esc = e => { if (e.key === 'Escape') setOpen(false); };
+      document.addEventListener('pointerdown', out); document.addEventListener('keydown', esc);
+      return () => { document.removeEventListener('pointerdown', out); document.removeEventListener('keydown', esc); };
+    }, []);
+    return html`<div ref=${ref} className="relative min-w-0">
+      <button id="scope-select" type="button" aria-haspopup="listbox" aria-expanded=${open} onClick=${() => setOpen(o => !o)}
+        className="flex h-9 min-w-0 items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+        <span className="truncate">${DATA[scope].short}</span>
+        <${Icon} name="chevrons" className="h-4 w-4 shrink-0 opacity-50" />
+      </button>
+      ${open && html`<div role="listbox" className="absolute left-0 top-11 z-40 w-64 rounded-md border bg-popover p-1 text-popover-foreground shadow-md">
+        ${['esc', 'red'].map(k => html`<button key=${k} id=${'opt-' + k} role="option" aria-selected=${k === scope} type="button"
+          onClick=${() => { onPick(k); setOpen(false); }}
+          className="relative flex w-full items-center gap-2 rounded-sm py-1.5 pl-2 pr-8 text-left text-sm hover:bg-accent hover:text-accent-foreground">
+          <span className="flex-1 truncate">${DATA[k].short}</span>
+          <span className="text-xs text-muted-foreground">${DATA[k].badge}</span>
+          ${k === scope && html`<span className="absolute right-2"><${Icon} name="check" /></span>`}
+        </button>`)}
+      </div>`}
+    </div>`;
+  }
+
+  const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function SchoolSearch({ scope, onPick }) {
+    const [q, setQ] = useState('');
+    const [hi, setHi] = useState(0);
+    const items = ['esc', 'red'].map(k => DATA[k]).filter(d => norm(d.title + ' ' + d.short + ' ' + d.badge).includes(norm(q.trim())));
+    const onKey = e => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); setHi(h => Math.min(h + 1, items.length - 1)); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setHi(h => Math.max(h - 1, 0)); }
+      else if (e.key === 'Enter' && items[hi]) { onPick(items[hi].key, true); }
+    };
+    return html`<div className="overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-sm">
+      <div className="flex items-center gap-2 border-b px-3">
+        <${Icon} name="search" className="h-4 w-4 shrink-0 opacity-50" />
+        <input id="school-search" value=${q} autoComplete="off" placeholder="Busca por nombre o RBD"
+          onChange=${e => { setQ(e.target.value); setHi(0); }} onKeyDown=${onKey}
+          className="flex h-11 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground" />
+      </div>
+      <div className="p-1" role="listbox" aria-label="Establecimientos">
+        <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground">Establecimientos</p>
+        ${items.length ? items.map((d, i) => html`<button key=${d.key} id=${'pick-' + d.key} type="button" role="option" aria-selected=${d.key === scope}
+            onMouseEnter=${() => setHi(i)} onClick=${() => onPick(d.key, true)}
+            className=${cn('flex w-full items-center gap-2 rounded-sm px-2 py-2 text-left text-sm outline-none', i === hi && 'bg-accent text-accent-foreground')}>
+            <span className="min-w-0 flex-1 truncate">${d.title}</span>
+            <${Badge}>${d.badge}<//>
+            <span className="w-4">${d.key === scope && html`<${Icon} name="check" />`}</span>
+          </button>`)
+        : html`<p className="py-6 text-center text-sm text-muted-foreground">Sin resultados</p>`}
+      </div>
+    </div>`;
+  }
+
+  /* ---------------- gráficos de las escenas 4 a 6 ---------------- */
+  function ExecChart({ d, on }) {
+    const row = 'grid grid-cols-[92px_minmax(0,1fr)_56px] items-center gap-3 sm:grid-cols-[110px_minmax(0,1fr)_64px]';
+    return html`<div className=${cn('chart', on && 'on')}>
+      <div className=${row}><span></span><div className="relative h-4 text-[11px] text-muted-foreground"><span className="absolute -translate-x-1/2 whitespace-nowrap" style=${{ left: '75%' }}>75% del año</span></div><span></span></div>
+      ${d.exec.map(([k, v]) => html`<div key=${k} className=${row}>
+        <span className="truncate text-xs sm:text-sm">${k === 'general' ? 'General' : NAME[k]}</span>
+        <div className="relative h-7 rounded-md bg-muted" data-tip=${NAME[k] + ' · ejecutado ' + pc(v)}>
+          <div className=${cn('absolute inset-y-0 left-0 rounded-r-[4px]', v > 100 && 'bar-over')} style=${{ width: Math.min(v, 100) + '%', background: COLOR(k) }}></div>
+          <i className="absolute -bottom-1 -top-1 w-0.5 rounded bg-foreground" style=${{ left: '75%' }}></i>
+        </div>
+        <span className="text-right text-sm font-medium tabular-nums">${pc(v)}</span>
+      </div>`)}
+    </div>`;
+  }
+  function CompareChart({ d, on }) {
+    if (!d.compare) return null;
+    const X = v => (v / 150 * 100) + '%';
+    const row = 'grid grid-cols-[92px_minmax(0,1fr)_70px] items-center gap-3 sm:grid-cols-[120px_minmax(0,1fr)_84px]';
+    return html`<div className=${cn('chart', on && 'on')}>
+      <div className=${row}><span></span><div className="relative h-4 text-[11px] tabular-nums text-muted-foreground">
+        ${[0, 50, 100, 150].map(t => html`<span key=${t} className=${cn('absolute whitespace-nowrap', t === 0 ? '' : t === 150 ? '-translate-x-full' : '-translate-x-1/2', t === 100 && 'font-medium text-foreground')} style=${{ left: X(t) }}>${t}%</span>`)}
+      </div><span></span></div>
+      ${d.compare.map(([lab, e, r]) => html`<div key=${lab} className=${row}>
+        <span className="truncate text-xs sm:text-sm">${lab}</span>
+        <div className="relative h-7">
+          <i className="absolute inset-y-0 w-px bg-border" style=${{ left: X(100) }}></i>
+          <i className="absolute top-1/2 h-0.5 -translate-y-1/2 bg-border" style=${{ left: X(Math.min(e, r)), width: 'calc(' + X(Math.max(e, r)) + ' - ' + X(Math.min(e, r)) + ')' }}></i>
+          <i className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-muted-foreground bg-card" style=${{ left: X(r), boxShadow: '0 0 0 2px hsl(var(--card))' }} data-tip=${'Red · ' + lab + ': ' + pc(r)}></i>
+          <i className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground" style=${{ left: X(e), boxShadow: '0 0 0 2px hsl(var(--card))' }} data-tip=${d.short + ' · ' + lab + ': ' + pc(e)}></i>
+        </div>
+        <span className="text-right text-sm tabular-nums"><span className="font-medium">${pc(e)}</span><br /><span className="text-xs text-muted-foreground">${pc(r)}</span></span>
+      </div>`)}
+    </div>`;
+  }
+  function SaldoChart({ d, on }) {
+    const max = Math.max(...d.saldos.map(s => Math.abs(s[1])));
+    const row = 'grid grid-cols-[92px_minmax(0,1fr)_84px] items-center gap-3 sm:grid-cols-[110px_minmax(0,1fr)_96px]';
+    const bar = (v, color) => html`<div className="relative h-5">
+      <i className="absolute -bottom-1 -top-1 w-px bg-foreground/40" style=${{ left: '50%' }}></i>
+      <div className=${cn('absolute inset-y-0', v >= 0 ? 'rounded-r-[4px]' : 'rounded-l-[4px]')}
+        style=${{ [v >= 0 ? 'left' : 'right']: '50%', width: Math.max(Math.abs(v) / max * 50, 0.4) + '%', background: color }}></div>
+    </div>`;
+    return html`<div className=${cn('chart', on && 'on')} style=${{ gap: d.saldos.length > 6 ? '8px' : '12px' }}>
+      ${d.saldos.map(([n, v, k]) => html`<div key=${n} className=${row} data-tip=${n + ' · ' + mmS(v)}>
+        <span className="truncate text-xs sm:text-sm">${n}</span>${bar(v, COLOR(k))}
+        <span className=${cn('text-right text-sm tabular-nums', v < 0 && 'neg')}>${mmS(v)}</span>
+      </div>`)}
+      <div className=${cn(row, 'border-t pt-3')}>
+        <span className="text-sm font-medium">Total</span>${bar(d.saldo, 'hsl(var(--foreground))')}
+        <span className=${cn('text-right text-sm font-semibold tabular-nums', d.saldo < 0 && 'neg')}>${mmS(d.saldo)}</span>
+      </div>
+    </div>`;
+  }
+
+  /* ---------------- leyenda y tabla por escena ---------------- */
+  const Sw = ({ c, ring }) => html`<i className="inline-block h-2.5 w-2.5 shrink-0 rounded-[3px]" style=${ring ? { border: '1.5px solid ' + c } : { background: c }}></i>`;
+  function Legend({ d, id }) {
+    const item = (k, c, label, ring) => html`<span key=${k} className="inline-flex items-center gap-1.5"><${Sw} c=${c} ring=${ring} />${label}</span>`;
+    if (id === 'ingresos') return FONDOS.map(f => item(f, COLOR(f), SHORT[f] + ' $' + d.incomeUnits[f]));
+    if (id === 'gastos') return [...TIPOS.map(t => item(t, COLOR(t), NAME[t] + ' $' + d.typePer100[t])), html`<span key="u" className="ml-auto">1 cuadro ≈ $1</span>`];
+    if (id === 'fondos') return [...TIPOS.map(t => item(t, COLOR(t), NAME[t])), item('m', 'hsl(var(--muted-foreground))', 'Marco = ingreso del fondo', true)];
+    if (id === 'ejecucion') return html`<span>Raya: 75% del año transcurrido</span>`;
+    if (id === 'red') return [html`<span key="e" className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-foreground"></i>${d.short}</span>`,
+      html`<span key="r" className="inline-flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full border-2 border-muted-foreground"></i>Red AP</span>`];
+    if (id === 'saldo') return html`<span>${d.key === 'red' ? 'Saldos informados en el cuadro, con arrastre de 2025' : 'Ingresos menos gastos por fondo'}</span>`;
+    return null;
+  }
+  function sceneTable(d, id) {
+    const per = (v, b) => b ? '$' + nf1.format(v / b * 100) : '—';
+    if (id === 'ingresos') return [['Fuente', 'Monto', 'De cada $100'], FONDOS.map(f => [NAME[f], mm(d.incomeMM[f]), '$' + nf1.format(d.incomeShare[f])])];
+    if (id === 'gastos') return [['Tipo', 'Monto', 'Por cada $100'], TIPOS.map(t => [NAME[t], mm(d.typeMM[t]), '$' + d.typePer100[t]])];
+    if (id === 'fondos') return [['Fondo', 'Ingreso', 'Gasto', 'Gasto por $100'], FONDOS.map(f => [NAME[f], mm(d.incomeMM[f]), mm(d.fondoGasto[f]), per(d.fondoGasto[f], d.incomeMM[f])])];
+    if (id === 'ejecucion') return [['Fondo', 'Ejecución'], d.exec.map(([k, v]) => [NAME[k], pc(v)])];
+    if (id === 'red') return [['Indicador', d.short, 'Red'], d.compare.map(([l, e, r]) => [l, pc(e), pc(r)])];
+    if (id === 'saldo') return [['Fondo', 'Saldo'], [...d.saldos.map(([n, v]) => [n, mmS(v)]), ['Total', mmS(d.saldo)]]];
+    return [[], []];
+  }
+
+  /* ---------------- escenario ---------------- */
+  function Stage({ d, steps, scene, goTo, playing, onPlay }) {
+    const ref = useRef(null);
+    const [dim, setDim] = useState({ W: 0, H: 0 });
+    const [panel, setPanel] = useState(false);
+    useLayoutEffect(() => {
+      const ro = new ResizeObserver(([e]) => setDim({ W: e.contentRect.width, H: e.contentRect.height }));
+      ro.observe(ref.current);
+      return () => ro.disconnect();
+    }, []);
+    useEffect(() => {
+      const k = e => { if (e.key === 'Escape') setPanel(false); };
+      document.addEventListener('keydown', k);
+      return () => document.removeEventListener('keydown', k);
+    }, []);
+    const sq = useMemo(() => buildSquares(d), [d]);
+    const L = useMemo(() => dim.W ? { grid: gridLayout(sq.length, dim.W, dim.H), cols: colLayout(d, sq, dim.W, dim.H) } : null, [d, sq, dim]);
+    const st = steps[Math.min(scene, steps.length - 1)];
+    const id = st.id;
+    const [head, rows] = sceneTable(d, id);
+
+    const squares = L && sq.map((q, i) => {
+      let p, color, op = 1, tip;
+      if (id === 'ingresos') { p = L.grid.pos(i); color = COLOR(q.src || q.t); op = q.src ? 1 : 0; tip = q.src && NAME[q.src]; }
+      else if (id === 'gastos') { p = L.grid.pos(i); color = COLOR(q.t); tip = NAME[q.t] + (i >= 100 ? ' · sobre los $100 recibidos' : ''); }
+      else { p = L.cols.pos[i]; color = COLOR(q.t); tip = NAME[q.f] + ' · ' + NAME[q.t]; if (id !== 'fondos') op = 0; }
+      return html`<div key=${i} className="sq" data-tip=${op ? tip : null}
+        style=${{ transform: 'translate(' + p.x + 'px,' + p.y + 'px) scale(' + (p.s / BASE) + ')', backgroundColor: color, opacity: op, pointerEvents: op ? 'auto' : 'none', transitionDelay: (i % 41) * 6 + 'ms' }}></div>`;
+    });
+
+    return html`<div id="stage" className="rounded-xl border bg-card text-card-foreground shadow-sm">
+      <div className="flex items-center justify-between gap-3 px-4 pt-4">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium">${st.kicker}</p>
+          <p className="text-xs tabular-nums text-muted-foreground">${(scene + 1) + ' / ' + steps.length} · ${d.short}</p>
+        </div>
+        <div className="flex items-center gap-1">
+          <${Button} variant="ghost" size="sm" id="btn-play" onClick=${onPlay} aria-pressed=${playing}>
+            <${Icon} name=${playing ? 'pause' : 'play'} className="h-3.5 w-3.5" />${playing ? 'Pausa' : 'Reproducir'}
+          <//>
+          <${Button} variant=${panel ? 'outline' : 'ghost'} size="sm" id="btn-data" onClick=${() => setPanel(v => !v)} aria-pressed=${panel}>
+            <${Icon} name="table" className="h-3.5 w-3.5" />Datos
+          <//>
+        </div>
+      </div>
+      <div className="flex gap-1 px-4 pt-2">
+        ${steps.map((s, i) => html`<button key=${s.id} id=${'seg-' + s.id} type="button" aria-label=${'Ir a ' + s.kicker} onClick=${() => goTo(i)} className="flex-1 py-1.5">
+          <span className=${cn('block h-1 rounded-full transition-colors', i <= scene ? 'bg-foreground' : 'bg-muted')}></span>
+        </button>`)}
+      </div>
+      <div ref=${ref} className="viz mx-4 mt-1" role="img" aria-label=${st.kicker + ': ' + st.value + ', ' + st.line}>
+        ${L && L.cols.cols.map(c => html`<div key=${'f' + c.f} className="frame" data-tip=${id === 'fondos' ? NAME[c.f] + ' · recibe ' + mm(d.incomeMM[c.f]) + ' · gasta ' + mm(d.fondoGasto[c.f]) : null}
+          style=${{ left: c.x - 4, top: c.base - c.h - 4, width: c.w + 8, height: c.h + 8, borderColor: COLOR(c.f), opacity: id === 'fondos' ? 1 : 0 }}><i style=${{ background: COLOR(c.f) }}></i></div>`)}
+        ${squares}
+        ${L && html`<div className="limit" style=${{ top: L.grid.limitY, left: L.grid.x0 - 6, width: L.grid.gw + 12, opacity: id === 'gastos' ? 1 : 0 }}><span>$100</span></div>`}
+        ${L && L.cols.cols.map(c => html`<span key=${'l' + c.f} className="col-label" style=${{ left: c.x + c.w / 2, top: c.base + 6, opacity: id === 'fondos' ? 1 : 0 }}>${SHORT[c.f]}</span>`)}
+        <${ExecChart} d=${d} on=${id === 'ejecucion'} />
+        <${CompareChart} d=${d} on=${id === 'red'} />
+        <${SaldoChart} d=${d} on=${id === 'saldo'} />
+        ${panel && html`<div className="absolute inset-0 z-10 overflow-auto rounded-lg border bg-card p-3">
+          <div className="mb-2 flex items-center justify-between"><p className="text-sm font-medium">${st.kicker}</p>
+            <${Button} variant="ghost" size="sm" id="btn-data-close" aria-label="Cerrar datos" onClick=${() => setPanel(false)}><${Icon} name="x" /><//></div>
+          <table className="w-full text-sm">
+            <thead><tr className="border-b">${head.map((h, i) => html`<th key=${h} className=${cn('h-9 px-2 align-middle font-medium text-muted-foreground', i ? 'text-right' : 'text-left')}>${h}</th>`)}</tr></thead>
+            <tbody>${rows.map(r => html`<tr key=${r[0]} className="border-b last:border-0">${r.map((c, i) => html`<td key=${i} className=${cn('px-2 py-2 align-middle', i ? 'text-right tabular-nums' : '', typeof c === 'string' && c.startsWith('−') && 'neg')}>${c}</td>`)}</tr>`)}</tbody>
+          </table>
+        </div>`}
+      </div>
+      <div className="flex min-h-[44px] flex-wrap items-center gap-x-4 gap-y-1 px-4 pb-4 pt-3 text-xs text-muted-foreground">
+        <${Legend} d=${d} id=${id} />
+      </div>
+    </div>`;
+  }
+
+  /* ---------------- app ---------------- */
+  function App() {
+    const [scope, setScope] = useState('esc');
+    const [scene, setScene] = useState(0);
+    const [playing, setPlaying] = useState(false);
+    const [tableOpen, setTableOpen] = useState(false);
+    const d = DATA[scope];
+    const steps = useMemo(() => stepsFor(d), [d]);
+    const sceneRef = useRef(0);
+    sceneRef.current = scene;
+
+    const activeLine = () => {
+      const lg = window.innerWidth >= 1024;
+      if (lg) return window.innerHeight / 2;
+      const st = document.getElementById('stage');
+      const bottom = 56 + (st ? st.offsetHeight + 8 : 0);
+      return (bottom + window.innerHeight) / 2;
+    };
+    useEffect(() => {
+      let raf = 0;
+      const calc = () => {
+        raf = 0;
+        const cards = [...document.querySelectorAll('[data-card]')];
+        const line = activeLine();
+        let best = 0, bd = Infinity;
+        cards.forEach((c, i) => { const r = c.getBoundingClientRect(); const dd = Math.abs(r.top + r.height / 2 - line); if (dd < bd) { bd = dd; best = i; } });
+        setScene(best);
+      };
+      const on = () => { if (!raf) raf = requestAnimationFrame(calc); };
+      window.addEventListener('scroll', on, { passive: true });
+      window.addEventListener('resize', on);
+      calc();
+      return () => { window.removeEventListener('scroll', on); window.removeEventListener('resize', on); cancelAnimationFrame(raf); };
+    }, [steps.length]);
+
+    const goTo = useCallback(i => {
+      const c = document.querySelectorAll('[data-card]')[i];
+      if (!c) return;
+      const r = c.getBoundingClientRect();
+      window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - activeLine(), behavior: reduce ? 'auto' : 'smooth' });
+    }, []);
+
+    useEffect(() => {
+      if (!playing) return;
+      const story = document.getElementById('historia').getBoundingClientRect();
+      if (story.top > window.innerHeight * 0.3) goTo(0);
+      const t = setInterval(() => {
+        const next = sceneRef.current + 1;
+        if (next >= steps.length) { setPlaying(false); return; }
+        goTo(next);
+      }, 3200);
+      const stop = () => setPlaying(false);
+      window.addEventListener('wheel', stop, { passive: true });
+      window.addEventListener('touchstart', stop, { passive: true });
+      window.addEventListener('keydown', stop);
+      return () => { clearInterval(t); window.removeEventListener('wheel', stop); window.removeEventListener('touchstart', stop); window.removeEventListener('keydown', stop); };
+    }, [playing, steps.length, goTo]);
+
+    const pick = (k, jump) => {
+      setScope(k);
+      if (jump) document.getElementById('historia').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    };
+    const stats = [['Ingresos', mm(d.ingresos)], ['Gastos', mm(d.gastos)], [d.saldoLabel, mmS(d.saldo), d.saldo < 0]];
+
+    return html`<${React.Fragment}>
+      <header className="site-header border-b bg-background/85 backdrop-blur">
+        <div className="gutter mx-auto flex h-14 max-w-6xl items-center gap-3">
+          <span className="shrink-0 font-semibold tracking-tight">Peso a Peso</span>
+          <span className="h-5 w-px shrink-0 bg-border"></span>
+          <${ScopeSelect} scope=${scope} onPick=${k => pick(k, false)} />
+          <span className="ml-auto hidden sm:inline-flex"><${Badge}>Corte 30·09·2026<//></span>
+        </div>
+      </header>
+
+      <section className="gutter mx-auto grid max-w-6xl gap-10 py-12 lg:grid-cols-12 lg:items-end lg:py-20">
+        <div className="space-y-6 lg:col-span-7">
+          <${Badge} variant="secondary">Educación Pública · San José de Maipo<//>
+          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">${d.title}</h1>
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><${Badge}>${d.badge}<//><span>enero a septiembre 2026</span></div>
+          <dl className="grid max-w-xl grid-cols-3 gap-4 border-t pt-6">
+            ${stats.map(([k, v, neg]) => html`<div key=${k} className="min-w-0"><dt className="text-xs text-muted-foreground">${k}</dt><dd className=${cn('mt-1 text-base font-semibold tabular-nums sm:text-2xl', neg && 'neg')}>${v}</dd></div>`)}
+          </dl>
+          <${Button} id="btn-start" onClick=${() => goTo(0)}><${Icon} name="down" />Ver la historia<//>
+        </div>
+        <div className="space-y-2 lg:col-span-5">
+          <p className="text-sm font-medium">Cambiar establecimiento</p>
+          <${SchoolSearch} scope=${scope} onPick=${pick} />
+        </div>
+      </section>
+
+      <section id="historia" className="gutter mx-auto max-w-6xl lg:grid lg:grid-cols-12 lg:gap-10">
+        <div className="stage-sticky z-20 bg-background pb-2 pt-2 lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:self-start lg:pb-0 lg:pt-0">
+          <${Stage} d=${d} steps=${steps} scene=${Math.min(scene, steps.length - 1)} goTo=${goTo} playing=${playing} onPlay=${() => setPlaying(p => !p)} />
+        </div>
+        <div className="pb-[40vh] pt-4 lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:pb-[42vh] lg:pt-[16vh]">
+          ${steps.map((s, i) => html`<div key=${s.id} className="flex min-h-[50vh] items-center lg:min-h-[76vh]">
+            <div data-card=${i} className=${cn('w-full max-w-sm rounded-xl border bg-card p-5 shadow-sm transition-opacity duration-500 lg:p-6', i === scene ? 'opacity-100' : 'opacity-40')}>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">${s.kicker}</p>
+              <p className=${cn('mt-2 text-4xl font-semibold tracking-tight tabular-nums lg:text-5xl', s.neg && 'neg')}>${s.value}</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">${s.line}</p>
+            </div>
+          </div>`)}
+        </div>
+      </section>
+
+      <section className="gutter mx-auto max-w-6xl border-t py-12">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight">Cuadro de ingresos y gastos</h2>
+            <p className="text-sm text-muted-foreground">${d.short} · en millones de pesos</p>
+          </div>
+          <${Button} variant="outline" id="btn-table" aria-expanded=${tableOpen} onClick=${() => setTableOpen(o => !o)}>${tableOpen ? 'Ocultar cuadro' : 'Ver cuadro'}<//>
+        </div>
+        ${tableOpen && html`<div className="mt-6 overflow-x-auto rounded-xl border">
+          <table className="w-full min-w-[680px] text-sm">
+            <thead><tr className="border-b bg-muted/50">${['Fondo', 'Ingresos', 'Compras', 'Honorarios', 'Sueldos', 'Gastos', 'Saldo'].map((h, i) =>
+              html`<th key=${h} className=${cn('h-10 px-3 align-middle font-medium text-muted-foreground', i ? 'text-right' : 'text-left')}>${h}</th>`)}</tr></thead>
+            <tbody>${d.table.map((r, ri) => html`<tr key=${r[0]} className=${cn('border-b transition-colors hover:bg-muted/50', ri === d.table.length - 1 && 'border-0 bg-muted/30 font-semibold')}>
+              ${r.map((c, i) => html`<td key=${i} className=${cn('px-3 py-2.5 align-middle', i ? 'text-right tabular-nums' : '', i === 6 && c < 0 && 'neg')}>${i === 0 ? c : (c === 0 ? '—' : nf1.format(c / 1e6))}</td>`)}
+            </tr>`)}</tbody>
+          </table>
+        </div>`}
+      </section>
+
+      <footer className="gutter mx-auto max-w-6xl pb-12 text-xs text-muted-foreground">
+        Fuente: cuadro de ingresos y gastos de la AP, corte al 30 de septiembre de 2026 · MM = millones de pesos
+      </footer>
+    <//>`;
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(html`<${App} />`);
+
+  /* ---------------- tooltip ---------------- */
+  const tip = document.getElementById('tip');
+  function showTip(el) {
+    tip.textContent = el.getAttribute('data-tip');
+    tip.hidden = false;
+    const r = el.getBoundingClientRect(), w = tip.offsetWidth;
+    tip.style.left = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8, r.left + r.width / 2)) + 'px';
+    tip.style.top = Math.max(r.top, tip.offsetHeight + 16) + 'px';
+  }
+  document.addEventListener('pointerover', e => { const t = e.target.closest('[data-tip]'); if (t) showTip(t); else tip.hidden = true; });
+  window.addEventListener('scroll', () => { tip.hidden = true; }, { passive: true });
+})();
+</script>

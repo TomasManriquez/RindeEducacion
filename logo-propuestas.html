@@ -1,0 +1,187 @@
+<title>Logo Peso a Peso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<style>
+/* Layout: cuatro láminas de marca en grilla 2×2; cada una muestra el logo en escenario oscuro, en papel y en tamaño favicon, con su mensaje y su animación */
+:root {
+  --paper: #f5f6f3; --surface: #ffffff; --ink: #0d1726; --ink-2: #4a5565; --muted: #5f6977; --line: #dde1e4;
+  --stage: #0a111d; --stage-ink: #eef1f4; --stage-dim: #9aa6b6;
+  --c-general: #2a78d6; --c-bonif: #eb6834; --c-sep: #1baf7a; --c-pie: #eda100;
+  --cs-general: #3987e5; --cs-bonif: #d95926; --cs-sep: #199e70; --cs-pie: #c98500;
+  --f-display: "Archivo", "Arial Black", system-ui, sans-serif;
+  --f-ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Geist Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0b1018; --surface: #121a26; --ink: #eef1f4; --ink-2: #b5becb; --muted: #8792a2; --line: #1f2a38; --stage: #05080e;
+    --c-general: #3987e5; --c-bonif: #d95926; --c-sep: #199e70; --c-pie: #c98500; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0b1018; --surface: #121a26; --ink: #eef1f4; --ink-2: #b5becb; --muted: #8792a2; --line: #1f2a38; --stage: #05080e;
+  --c-general: #3987e5; --c-bonif: #d95926; --c-sep: #199e70; --c-pie: #c98500; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 15px/1.55 var(--f-ui); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1160px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 48px 64px; }
+h1, h2 { font-family: var(--f-display); font-stretch: 125%; font-weight: 800; letter-spacing: -.03em; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.6vw, 3.2rem); line-height: 1; }
+.kick { font: 500 12px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.head { display: grid; gap: 10px; margin-bottom: 32px; }
+.head p { margin: 0; color: var(--ink-2); max-width: 60ch; }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; display: grid; gap: 14px; align-content: start; }
+.card.rec { border-color: var(--ink); }
+
+/* lámina oscura */
+.hero { position: relative; background: var(--stage); border-radius: 12px; height: 210px; display: grid; place-items: center; cursor: pointer; overflow: hidden;
+  --mk: var(--stage-ink); --g: var(--cs-general); --b: var(--cs-bonif); --s: var(--cs-sep); --p: var(--cs-pie); --pg: #1d2737; }
+.lockup { display: flex; align-items: center; gap: 16px; color: var(--stage-ink); }
+.lockup svg { width: 76px; height: 76px; overflow: visible; }
+.word { font-family: var(--f-display); font-stretch: 125%; font-weight: 800; font-size: 30px; letter-spacing: -.03em; line-height: .92; }
+.word small { display: block; margin-top: 8px; font: 500 10.5px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--stage-dim); }
+.replay { position: absolute; right: 10px; bottom: 10px; font: 500 12px var(--f-ui); color: var(--stage-dim); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+.replay:hover { color: var(--stage-ink); }
+.tag { position: absolute; left: 12px; top: 12px; font: 500 11px var(--f-mono); color: var(--stage-dim); letter-spacing: .06em; }
+
+/* fila de usos */
+.uses { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.light { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; color: var(--ink);
+  --mk: var(--ink); --g: var(--c-general); --b: var(--c-bonif); --s: var(--c-sep); --p: var(--c-pie); --pg: var(--line); }
+.light svg { width: 34px; height: 34px; }
+.light span { font-family: var(--f-display); font-stretch: 125%; font-weight: 800; font-size: 15px; letter-spacing: -.02em; }
+.fav { display: flex; align-items: end; gap: 10px; color: var(--muted); font: 500 11px var(--f-mono); }
+.fav i { display: grid; place-items: center; background: var(--stage); border-radius: 7px;
+  --mk: var(--stage-ink); --g: var(--cs-general); --b: var(--cs-bonif); --s: var(--cs-sep); --p: var(--cs-pie); --pg: #1d2737; }
+.fav i.f32 { width: 32px; height: 32px; } .fav i.f32 svg { width: 24px; height: 24px; }
+.fav i.f16 { width: 16px; height: 16px; border-radius: 4px; } .fav i.f16 svg { width: 13px; height: 13px; }
+
+.txt { display: grid; gap: 8px; padding: 0 4px 6px; }
+.txt h2 { font-size: 1.3rem; }
+.msg { font-family: var(--f-display); font-stretch: 112%; font-weight: 700; font-size: 1.05rem; line-height: 1.25; margin: 0; }
+.txt ul { margin: 0; padding-left: 1.1em; color: var(--ink-2); display: grid; gap: 4px; font-size: 14px; }
+.anim { font-size: 13px; color: var(--muted); margin: 0; }
+.anim b { color: var(--ink); font-weight: 600; }
+.badge { justify-self: start; font: 500 11px var(--f-mono); padding: 3px 9px; border-radius: 999px; background: var(--ink); color: var(--paper); }
+
+.verdict { margin-top: 28px; background: var(--stage); color: var(--stage-ink); border-radius: 18px; padding: 26px; display: grid; gap: 10px; }
+.verdict h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.verdict p { margin: 0; color: var(--stage-dim); max-width: 70ch; }
+
+/* ---------- marcas (todas en viewBox 0 0 64 64) ---------- */
+svg .mk { fill: var(--mk); }
+svg .g { fill: var(--g); } svg .b { fill: var(--b); } svg .s { fill: var(--s); } svg .p { fill: var(--p); }
+svg .pg { fill: var(--pg); }
+svg * { transform-box: fill-box; }
+
+/* A · La P apilada */
+.A .bar { transform-origin: left center; }
+.play .A .bar { animation: growX .7s cubic-bezier(.34,1.56,.64,1) both; }
+.play .A .bar:nth-of-type(2) { animation-delay: .1s; } .play .A .bar:nth-of-type(3) { animation-delay: .2s; } .play .A .bar:nth-of-type(4) { animation-delay: .3s; }
+.play .A .stem { animation: growY .5s cubic-bezier(.65,0,.35,1) both; transform-origin: center bottom; }
+@keyframes growX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* B · La boleta */
+.play .B .paper { animation: print .8s cubic-bezier(.65,0,.35,1) both; }
+.B .ln { transform-origin: left center; }
+.play .B .ln { animation: growX .45s ease both; }
+.play .B .ln:nth-of-type(1) { animation-delay: .55s; } .play .B .ln:nth-of-type(2) { animation-delay: .7s; } .play .B .ln:nth-of-type(3) { animation-delay: .85s; }
+.B .ok { transform-origin: center; }
+.play .B .ok { animation: pop .45s cubic-bezier(.34,1.56,.64,1) 1.05s both; }
+.B .tick { fill: none; stroke: #0a111d; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 20; stroke-dashoffset: 0; }
+.play .B .tick { animation: draw .35s ease 1.35s both; }
+@keyframes print { from { transform: translateY(-40%); clip-path: inset(0 0 100% 0); } to { transform: none; clip-path: inset(0 0 0 0); } }
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes draw { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
+
+/* C · Peso a peso */
+.play .C .st { animation: drop .55s cubic-bezier(.34,1.56,.64,1) both; }
+.play .C .st:nth-of-type(2) { animation-delay: .18s; } .play .C .st:nth-of-type(3) { animation-delay: .36s; }
+.play .C .st:nth-of-type(4) { animation-delay: .54s; }
+@keyframes drop { from { transform: translateY(-160%); opacity: 0; } 60% { opacity: 1; } to { transform: none; opacity: 1; } }
+
+/* D · Libro de cuentas */
+.D .bk { transform-origin: center bottom; }
+.play .D .pgL { animation: openL .6s cubic-bezier(.65,0,.35,1) both; transform-origin: right center; }
+.play .D .pgR { animation: openR .6s cubic-bezier(.65,0,.35,1) both; transform-origin: left center; }
+.play .D .bk { animation: growY .55s cubic-bezier(.34,1.56,.64,1) both; }
+.play .D .bk:nth-of-type(1) { animation-delay: .55s; } .play .D .bk:nth-of-type(2) { animation-delay: .68s; } .play .D .bk:nth-of-type(3) { animation-delay: .81s; }
+.D .tl { transform-origin: left center; }
+.play .D .tl { animation: growX .4s ease .45s both; }
+@keyframes openL { from { transform: scaleX(.15); } to { transform: none; } }
+@keyframes openR { from { transform: scaleX(.15); } to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) { .play * { animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <span class="kick">Peso a Peso · marca</span>
+    <h1>Cuatro logos, cuatro mensajes.</h1>
+    <p>Pasa el cursor o toca cada lámina para ver su animación. Cada una se muestra en escenario oscuro, sobre papel y en tamaño favicon (32 y 16 px).</p>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <section class="verdict">
+    <span class="kick" style="color:var(--stage-dim)">Mi recomendación</span>
+    <h2>D · Libro de cuentas</h2>
+    <p>Es la única que dice las dos cosas que vendes en una sola imagen: educación (el libro) y rendición de cuentas (el gráfico en la página). Se reconoce a 16 px por la silueta del libro abierto y su animación cuenta la historia del producto: se abre la escuela y aparecen sus números. Si prefieres algo más tipográfico y sobrio para documentos formales, la A es la segunda opción.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  const MARKS = {
+    A: '<svg class="A" viewBox="0 0 64 64" aria-hidden="true"><rect class="mk stem" x="10" y="6" width="12" height="52" rx="3"/>' +
+       '<rect class="g bar" x="25" y="6" width="22" height="8" rx="4"/><rect class="b bar" x="25" y="16" width="29" height="8" rx="4"/>' +
+       '<rect class="s bar" x="25" y="26" width="29" height="8" rx="4"/><rect class="p bar" x="25" y="36" width="20" height="8" rx="4"/></svg>',
+    B: '<svg class="B" viewBox="0 0 64 64" aria-hidden="true"><g class="paper"><path class="mk" d="M15 4h34a3 3 0 0 1 3 3v53l-5.3-3.5-5.4 3.5-5.3-3.5-5.4 3.5-5.3-3.5-5.4 3.5L12 60V7a3 3 0 0 1 3-3z"/>' +
+       '<rect class="g ln" x="19" y="13" width="26" height="5" rx="2.5"/><rect class="b ln" x="19" y="22" width="19" height="5" rx="2.5"/><rect class="s ln" x="19" y="31" width="23" height="5" rx="2.5"/></g>' +
+       '<g class="ok"><circle class="p" cx="47" cy="47" r="12"/><path class="tick" d="M41.5 47.2l3.8 3.8 7.3-7.4"/></g></svg>',
+    C: '<svg class="C" viewBox="0 0 64 64" aria-hidden="true"><rect class="g st" x="4" y="42" width="17" height="17" rx="3.5"/><rect class="s st" x="23.5" y="23" width="17" height="17" rx="3.5"/>' +
+       '<rect class="p st" x="43" y="4" width="17" height="17" rx="3.5"/><rect class="mk st" x="23.5" y="42" width="17" height="17" rx="3.5" opacity=".9"/></svg>',
+    D: '<svg class="D" viewBox="0 0 64 64" aria-hidden="true"><path class="mk pgL" d="M5 14c9-4 18-4 26 2v40c-8-5-17-5-26-2z"/><path class="mk pgR" d="M33 16c8-6 17-6 26-2v40c-9-3-18-3-26 2z"/>' +
+       '<rect class="pg tl" x="10" y="22" width="16" height="3" rx="1.5"/><rect class="pg tl" x="10" y="29" width="13" height="3" rx="1.5"/><rect class="pg tl" x="10" y="36" width="16" height="3" rx="1.5"/>' +
+       '<rect class="g bk" x="38" y="34" width="5" height="16" rx="1.5"/><rect class="s bk" x="45" y="26" width="5" height="22" rx="1.5"/><rect class="p bk" x="52" y="20" width="4.5" height="27" rx="1.5"/></svg>'
+  };
+  const DATA = [
+    { k: 'A', name: 'A · La P apilada', msg: 'La P de Peso, hecha con los fondos que se rinden.',
+      why: ['Un monograma simple que funciona como ícono de app y en documentos formales.', 'El ojo de la P es un gráfico de barras apiladas: General, Bonificaciones, SEP y PIE.'],
+      anim: 'el asta sube y las cuatro barras se llenan de izquierda a derecha, como un gráfico cargando.' },
+    { k: 'B', name: 'B · La boleta', msg: 'Cada peso, con su comprobante.',
+      why: ['Habla directo de rendición de cuentas: una boleta con sus líneas y un timbre de aprobado.', 'Directores y sostenedores conocen la boleta. Se lee al instante.'],
+      anim: 'la boleta sale de la impresora, aparecen sus líneas y al final se estampa el check.' },
+    { k: 'C', name: 'C · Peso a peso', msg: 'La confianza se construye peso a peso.',
+      why: ['Juega con "paso a paso": cuadros de $1 que forman una escalera ascendente.', 'Transmite avance y orden. Es la más simple y la más llamativa a la distancia.'],
+      anim: 'los cuadros caen uno a uno y encajan como bloques, subiendo la escalera.' },
+    { k: 'D', name: 'D · Libro de cuentas', msg: 'La escuela y sus cuentas, en el mismo libro.',
+      why: ['Libro abierto: educación. Barras en la página: el libro de cuentas de esa escuela.', 'Une las dos ideas del producto en una sola imagen, sin texto.'],
+      anim: 'el libro se abre, la página izquierda escribe sus líneas y en la derecha crecen las barras.', rec: true }
+  ];
+  const grid = document.getElementById('grid');
+  grid.innerHTML = DATA.map(d =>
+    '<article class="card' + (d.rec ? ' rec' : '') + '" id="card-' + d.k + '">' +
+      '<div class="hero" id="hero-' + d.k + '" tabindex="0" aria-label="Animar logo ' + d.k + '"><span class="tag">' + d.k + '</span>' +
+        '<div class="lockup">' + MARKS[d.k] + '<div class="word">Peso a<br>Peso<small>Cuentas claras</small></div></div>' +
+        '<button type="button" class="replay" id="replay-' + d.k + '">Reproducir</button></div>' +
+      '<div class="uses"><div class="light">' + MARKS[d.k] + '<span>Peso a Peso</span></div>' +
+        '<div class="fav"><i class="f32">' + MARKS[d.k] + '</i>32<i class="f16">' + MARKS[d.k] + '</i>16</div></div>' +
+      '<div class="txt">' + (d.rec ? '<span class="badge">Recomendado</span>' : '') + '<h2>' + d.name + '</h2><p class="msg">' + d.msg + '</p>' +
+        '<ul>' + d.why.map(w => '<li>' + w + '</li>').join('') + '</ul>' +
+        '<p class="anim"><b>Animación:</b> ' + d.anim + '</p></div>' +
+    '</article>').join('');
+
+  function play(card) { card.classList.remove('play'); void card.offsetWidth; card.classList.add('play'); }
+  document.querySelectorAll('.card').forEach((card, i) => {
+    const hero = card.querySelector('.hero');
+    hero.addEventListener('mouseenter', () => play(card));
+    hero.addEventListener('click', () => play(card));
+    hero.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(card); } });
+    setTimeout(() => play(card), 300 + i * 450);
+  });
+})();
+</script>

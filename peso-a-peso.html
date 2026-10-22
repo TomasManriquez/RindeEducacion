@@ -1,0 +1,1299 @@
+<title>Peso a Peso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: columna editorial de 1120px con nav píldora flotante (guiño a algoritmospublicos.cl); cada acto = texto 5fr + figura 7fr, apilado en móvil */
+:root {
+  --bg: #f3f4f1;
+  --surface: #fbfbfa;
+  --ink: #12171d;
+  --ink-2: #47505a;
+  --muted: #6b737c;
+  --line: #dfe2dd;
+  --line-strong: #c6cbc4;
+  --track: #e8eae5;
+  --chip: #e9ebe6;
+  --accent: #8f3f55;
+  --accent-soft: #f0e2e6;
+  --nav: #0c0e11;
+  --nav-ink: #f2f2ef;
+  --nav-dim: #a9adb2;
+  --nav-active-bg: #3a2029;
+  --nav-active-ink: #ecb8c6;
+  --door: #161b22;
+  --door-ink: #f1f2ee;
+  --door-dim: #b4bac1;
+  --ridge: rgba(255,255,255,0.07);
+  --tip-bg: #12171d;
+  --tip-ink: #f3f4f1;
+  --shadow: 0 1px 2px rgba(18,23,29,.05), 0 8px 24px rgba(18,23,29,.06);
+  --hatch: rgba(255,255,255,.55);
+
+  /* series: subvenciones (orden validado para barras apiladas) */
+  --s-general: #2a78d6;
+  --s-bonif: #eb6834;
+  --s-sep: #1baf7a;
+  --s-pie: #eda100;
+  --s-otros: #a3a29b;
+  --on-general: #ffffff;
+  --on-fill: #12171d;
+  /* series: tipo de gasto (validado en todos los pares) */
+  --g-sueldos: #6250d6;
+  --g-compras: #008300;
+  --g-honor: #e87ba4;
+  /* estado */
+  --good: #0ca30c;
+  --warn: #fab219;
+  --crit: #d03b3b;
+  --good-ink: #006300;
+  --crit-ink: #b42f2f;
+
+  --f-display: "Gabarito", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1215; --surface: #171b20; --ink: #eef0ec; --ink-2: #b8bfc5; --muted: #8e969e;
+    --line: #2a3036; --line-strong: #3a4148; --track: #252a30; --chip: #232830;
+    --accent: #e6a3b5; --accent-soft: #3a222a;
+    --nav: #1c2026; --door: #1d232b; --ridge: rgba(255,255,255,0.05);
+    --tip-bg: #eef0ec; --tip-ink: #0f1215;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    --hatch: rgba(0,0,0,.45);
+    --s-general: #3987e5; --s-bonif: #d95926; --s-sep: #199e70; --s-pie: #c98500; --s-otros: #6f6e69;
+    --on-general: #0f1215;
+    --g-sueldos: #9085e9; --g-compras: #008300; --g-honor: #d55181;
+    --good-ink: #0ca30c; --crit-ink: #e66767;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1215; --surface: #171b20; --ink: #eef0ec; --ink-2: #b8bfc5; --muted: #8e969e;
+  --line: #2a3036; --line-strong: #3a4148; --track: #252a30; --chip: #232830;
+  --accent: #e6a3b5; --accent-soft: #3a222a;
+  --nav: #1c2026; --door: #1d232b; --ridge: rgba(255,255,255,0.05);
+  --tip-bg: #eef0ec; --tip-ink: #0f1215;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  --hatch: rgba(0,0,0,.45);
+  --s-general: #3987e5; --s-bonif: #d95926; --s-sep: #199e70; --s-pie: #c98500; --s-otros: #6f6e69;
+  --on-general: #0f1215;
+  --g-sueldos: #9085e9; --g-compras: #008300; --g-honor: #d55181;
+  --good-ink: #0ca30c; --crit-ink: #e66767;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1120px; margin-inline: auto; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.accent { color: var(--accent); }
+
+/* ---------- nav píldora ---------- */
+.pill {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 20;
+  margin: 12px auto 0; max-width: 780px;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--nav); color: var(--nav-ink);
+  border-radius: 999px; padding: 7px 7px 7px 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; flex: none; }
+.brand-mark { width: 1px; height: 28px; background: rgba(255,255,255,.35); }
+.brand-txt { font-size: 12px; line-height: 1.15; letter-spacing: .08em; text-transform: uppercase; }
+.brand-txt b { display: block; font-weight: 700; color: var(--nav-active-ink); }
+.pill-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-left: auto; min-width: 0; }
+.pill-links::-webkit-scrollbar { display: none; }
+.pill-links a { flex: none; text-decoration: none; font-size: 14px; color: var(--nav-dim); padding: 8px 14px; border-radius: 999px; transition: background .2s, color .2s; }
+.pill-links a:hover { color: var(--nav-ink); background: rgba(255,255,255,.06); }
+.pill-links a[aria-current="true"] { background: var(--nav-active-bg); color: var(--nav-active-ink); }
+@media (max-width: 640px) { .brand-txt span { display: none; } .brand-mark { display: none; } .pill { padding-left: 14px; } }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 72px 24px; display: grid; gap: 28px; }
+.hero h1 { font-size: clamp(2.5rem, 6.4vw, 4.75rem); line-height: 1.0; font-weight: 800; letter-spacing: -0.03em; max-width: 12.5em; }
+.hero h1 .accent { display: block; }
+.lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-2); max-width: 62ch; }
+.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+.door {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--door); color: var(--door-ink); text-decoration: none;
+  border-radius: 22px; padding: 26px 26px 30px; min-height: 230px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: transform .25s ease;
+}
+.door:hover { transform: translateY(-3px); }
+.door svg.ridge { position: absolute; inset: auto 0 0 0; width: 100%; height: 46%; z-index: -1; }
+.door .eyebrow { color: var(--door-dim); }
+.door h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; }
+.door h2 em { font-style: normal; color: var(--nav-active-ink); }
+.door .door-figs { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: auto; }
+.door .door-figs div { display: grid; }
+.door .door-figs b { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+.door .door-figs span { font-size: 13px; color: var(--door-dim); }
+.door .arrow { position: absolute; top: 22px; right: 24px; width: 28px; height: 28px; }
+.meta-line { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+@media (max-width: 760px) { .doors { grid-template-columns: 1fr; } }
+
+/* ---------- secciones ---------- */
+section.block { padding-block: 88px 24px; border-top: 1px solid var(--line); margin-top: 64px; }
+.sec-head { display: grid; gap: 14px; margin-bottom: 40px; max-width: 760px; }
+.sec-head h2 { font-size: clamp(2rem, 4.2vw, 3.1rem); line-height: 1.05; font-weight: 800; }
+.sec-head p { color: var(--ink-2); font-size: 1.075rem; max-width: 64ch; }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 20px; display: grid; gap: 4px; align-content: start; }
+.tile .lbl { font-size: 13px; color: var(--muted); }
+.tile .val { font-size: clamp(1.7rem, 3vw, 2.25rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+.tile .val small { font-size: .5em; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+.tile .sub { font-size: 13.5px; color: var(--ink-2); }
+@media (max-width: 900px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .tiles { grid-template-columns: 1fr; } }
+
+.findings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; margin-top: 48px; }
+.finding { display: grid; gap: 8px; align-content: start; padding-top: 18px; border-top: 1px solid var(--line-strong); }
+.finding h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.2; }
+.finding p { color: var(--ink-2); }
+.chip { display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-size: 12px; font-weight: 600; letter-spacing: .04em; padding: 3px 10px; border-radius: 999px; background: var(--chip); color: var(--ink-2); }
+@media (max-width: 760px) { .findings { grid-template-columns: 1fr; } }
+
+.checks { margin-top: 56px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 26px; display: grid; gap: 18px; }
+.checks h3 { font-size: 1.35rem; }
+.checks ol { margin: 0; padding-left: 1.2em; display: grid; gap: 14px; }
+.checks li { padding-left: 4px; color: var(--ink-2); }
+.checks li b { color: var(--ink); }
+
+/* ---------- actos ---------- */
+.act { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; padding-block: 56px; border-top: 1px solid var(--line); align-items: start; }
+.act:first-of-type { border-top: 0; padding-top: 8px; }
+.act-text { display: grid; gap: 14px; align-content: start; }
+@media (min-width: 861px) and (min-height: 760px) { .act-text { position: sticky; top: 104px; } }
+.act-num { font-family: var(--f-display); font-weight: 700; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.act h3 { font-size: clamp(1.7rem, 3vw, 2.3rem); line-height: 1.08; font-weight: 800; }
+.act-text p { color: var(--ink-2); }
+.act-text .big { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+.act-text .big small { display: block; font-size: 14px; letter-spacing: 0; font-weight: 500; color: var(--muted); margin-top: 6px; }
+@media (max-width: 860px) { .act { grid-template-columns: 1fr; gap: 24px; } .act-text { position: static; } }
+
+/* figura */
+.figure { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 16px; min-width: 0; }
+.fig-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 12px; }
+.fig-title { font-weight: 600; font-size: 1.02rem; }
+.fig-sub { font-size: 13.5px; color: var(--muted); }
+.fig-note { font-size: 13.5px; color: var(--ink-2); }
+.source { font-size: 12px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 11px; height: 11px; border-radius: 3px; flex: none; display: inline-block; }
+.sw.ring { background: transparent; border: 2px solid var(--muted); border-radius: 50%; }
+.sw.dot { border-radius: 50%; background: var(--ink); }
+
+/* segmentado */
+.seg { display: inline-flex; background: var(--chip); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { font: inherit; font-size: 13.5px; border: 0; background: transparent; color: var(--ink-2); padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); font-weight: 600; }
+
+/* barra apilada */
+.stack { display: flex; gap: 2px; height: 24px; }
+.stack > * { min-width: 2px; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--on-fill); border: 0; padding: 0; cursor: default; }
+.stack > :first-child { border-radius: 4px 0 0 4px; }
+.stack > :last-child { border-radius: 0 4px 4px 0; }
+.stack > :only-child { border-radius: 4px; }
+.f-general { background: var(--s-general); color: var(--on-general) !important; }
+.f-bonif { background: var(--s-bonif); }
+.f-sep { background: var(--s-sep); }
+.f-pie { background: var(--s-pie); }
+.f-otros { background: var(--s-otros); }
+.f-sueldos { background: var(--g-sueldos); }
+.f-compras { background: var(--g-compras); }
+.f-honor { background: var(--g-honor); }
+
+.ktable { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ktable td, .ktable th { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.ktable th { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .04em; }
+.ktable td.r, .ktable th.r { text-align: right; font-variant-numeric: tabular-nums; }
+.ktable tr:last-child td { border-bottom: 0; }
+
+/* unidades */
+.unit-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 28px)); gap: 3px; justify-content: start; }
+.unit-grid .c { aspect-ratio: 1; border-radius: 3px; transition: transform .2s; }
+.unit-grid .c.over { background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 6px); }
+.unit-grid .c:hover { transform: scale(1.15); }
+.unit-grid .limit { grid-column: 1 / -1; border-top: 2px solid var(--ink); margin-block: 4px 3px; position: relative; height: 0; }
+.unit-grid .limit span { position: absolute; left: calc(100% + 10px); top: -10px; font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.unit-wrap { display: flex; gap: 20px; flex-wrap: wrap; align-items: start; }
+.unit-side { display: grid; gap: 4px; min-width: 0; flex: 1 1 160px; }
+.unit-side b { font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.unit-side span { font-size: 13.5px; color: var(--ink-2); }
+@media (max-width: 520px) { .unit-grid .limit span { position: static; display: block; margin-top: 6px; white-space: normal; } .unit-grid .limit { height: auto; } }
+
+/* filas de barras */
+.rows { display: grid; gap: 12px; }
+.row { display: grid; grid-template-columns: 168px minmax(0, 1fr) 118px; gap: 14px; align-items: center; }
+.row .lab { font-size: 14px; line-height: 1.25; }
+.row .lab small { display: block; color: var(--muted); font-size: 12px; }
+.row .val { font-size: 13.5px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.row .val b { color: var(--ink); font-weight: 600; }
+.track { position: relative; height: 20px; }
+.track.bg { background: var(--track); border-radius: 4px; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 7px; font-size: 12px; font-weight: 600; }
+.bar.hatched { background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 6px); }
+.ref { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); border-radius: 1px; }
+.ref.soft { background: var(--muted); }
+.axis { position: relative; height: 18px; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.axis span:first-child { transform: none; }
+.axis span:last-child { transform: translateX(-100%); }
+.axis .mark { color: var(--ink); font-weight: 600; }
+.row.head .lab, .row.head .val { visibility: hidden; }
+.row.sep { padding-top: 12px; border-top: 1px dashed var(--line-strong); }
+.dot { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; box-shadow: 0 0 0 2px var(--surface); }
+.dot.esc { background: var(--ink); }
+.dot.red { background: var(--surface); border: 2px solid var(--muted); }
+.link { position: absolute; top: 50%; height: 2px; margin-top: -1px; background: var(--line-strong); }
+@media (max-width: 600px) {
+  .row { grid-template-columns: minmax(0, 1fr) 96px; gap: 6px 12px; }
+  .row .lab { grid-column: 1 / -1; }
+  .row.head .lab { display: none; }
+}
+
+.actions { display: grid; gap: 12px; }
+.action { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.action .amt { grid-row: span 2; font-size: 1.35rem; font-weight: 600; letter-spacing: -0.01em; min-width: 7.5ch; }
+.action h4 { font-family: var(--f-body); font-size: 1rem; font-weight: 600; letter-spacing: 0; }
+.action p { color: var(--ink-2); font-size: 14.5px; }
+@media (max-width: 480px) { .action { grid-template-columns: 1fr; } .action .amt { grid-row: auto; } }
+
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.fact { background: var(--bg); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; }
+.fact b { font-size: 1.25rem; font-weight: 600; }
+.fact span { font-size: 13px; color: var(--ink-2); }
+
+/* ---------- propuestas ---------- */
+.compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pcard { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 10px; align-content: start; text-decoration: none; transition: border-color .2s, transform .2s; }
+.pcard:hover { border-color: var(--accent); transform: translateY(-2px); }
+.pcard .letter { font-family: var(--f-display); font-weight: 800; font-size: 2.4rem; line-height: 1; color: var(--accent); }
+.pcard h3 { font-size: 1.35rem; line-height: 1.15; }
+.pcard p { color: var(--ink-2); font-size: 14.5px; }
+.pcard dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; margin: 6px 0 0; font-size: 13.5px; }
+.pcard dt { color: var(--muted); }
+.pcard dd { margin: 0; color: var(--ink); }
+@media (max-width: 900px) { .compare { grid-template-columns: 1fr; } }
+
+.proposal { margin-top: 72px; display: grid; gap: 28px; }
+.p-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 20px; align-items: end; }
+.p-head .letter { font-family: var(--f-display); font-weight: 800; font-size: clamp(4rem, 9vw, 6.5rem); line-height: .8; color: var(--accent); grid-row: span 2; }
+.p-head h3 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); line-height: 1.05; font-weight: 800; }
+.p-head p { color: var(--ink-2); font-size: 1.05rem; max-width: 62ch; }
+.p-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; align-items: start; }
+.spec { display: grid; gap: 0; margin: 0; }
+.spec > div { display: grid; gap: 4px; padding-block: 14px; border-top: 1px solid var(--line); }
+.spec dt { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.spec dd { margin: 0; color: var(--ink-2); font-size: 15px; }
+.spec dd b { color: var(--ink); font-weight: 600; }
+.spec ul { margin: 4px 0 0; padding-left: 1.1em; display: grid; gap: 4px; }
+@media (max-width: 960px) { .p-body { grid-template-columns: 1fr; } }
+
+/* storyboard */
+.board { overflow-x: auto; padding-bottom: 6px; }
+.board-row { display: flex; gap: 14px; width: max-content; }
+.frame { width: 168px; display: grid; gap: 8px; }
+.phone { aspect-ratio: 9 / 17; border-radius: 24px; border: 5px solid var(--door); background: var(--surface); padding: 18px 13px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; position: relative; }
+.phone.dark { background: var(--door); color: var(--door-ink); }
+.phone .t-eb { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.phone.dark .t-eb { color: var(--door-dim); }
+.phone .t-big { font-family: var(--f-display); font-weight: 800; font-size: 1.55rem; line-height: 1; letter-spacing: -0.02em; }
+.phone .t-h { font-family: var(--f-display); font-weight: 700; font-size: .98rem; line-height: 1.12; }
+.phone .t-p { font-size: 10.5px; line-height: 1.4; color: var(--ink-2); }
+.phone.dark .t-p { color: var(--door-dim); }
+.phone .mini { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; margin-top: auto; }
+.phone .mini i { aspect-ratio: 1; border-radius: 1.5px; }
+.phone .mini .lim { grid-column: 1 / -1; border-top: 1.5px solid var(--ink); }
+.phone .meter { height: 12px; background: var(--track); border-radius: 3px; position: relative; overflow: hidden; margin-top: auto; }
+.phone .meter b { position: absolute; inset: 0 auto 0 0; background: var(--s-general); }
+.phone .cta { margin-top: auto; font-size: 10.5px; font-weight: 600; background: var(--ink); color: var(--bg); border-radius: 999px; padding: 7px 10px; text-align: center; }
+.phone .ridge { position: absolute; inset: auto 0 0 0; width: 100%; height: 34%; }
+.frame figcaption { font-size: 12.5px; color: var(--ink-2); line-height: 1.35; }
+.frame figcaption b { display: block; color: var(--ink); }
+
+/* ficha */
+.ficha { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: var(--shadow); padding: 26px; display: grid; gap: 18px; }
+.ficha-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
+.ficha-top h4 { font-size: 1.25rem; line-height: 1.15; }
+.ficha-top .eyebrow { margin-bottom: 4px; }
+.ficha-top .rbd { text-align: right; font-size: 12.5px; color: var(--muted); }
+.ficha-top .rbd b { display: block; font-size: 1.05rem; color: var(--ink); font-family: var(--f-mono); }
+.ficha .headline { font-family: var(--f-display); font-size: 1.45rem; font-weight: 700; line-height: 1.15; }
+.ficha .headline span { color: var(--crit-ink); }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.status svg { width: 14px; height: 14px; flex: none; }
+.ficha-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
+.ficha h5 { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; font-family: var(--f-body); }
+.ficha ol { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; font-size: 14px; color: var(--ink-2); }
+.ficha ol b { color: var(--ink); }
+.ficha .foot { font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+.tscroll { overflow-x: auto; }
+@media (max-width: 640px) { .ficha-cols { grid-template-columns: 1fr; } .ficha { padding: 18px; } }
+
+/* lupa */
+.lupa { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 16px; min-width: 0; }
+.lupa-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 14px; }
+.crumbs button { font: inherit; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 2px 4px; border-radius: 6px; text-decoration: underline; text-underline-offset: 3px; }
+.crumbs span.cur { font-weight: 600; padding: 2px 4px; }
+.crumbs .sepc { color: var(--muted); }
+.lupa-total { font-size: 14px; color: var(--ink-2); }
+.lupa-total b { font-size: 1.6rem; color: var(--ink); font-weight: 600; letter-spacing: -0.02em; margin-right: 6px; }
+.lupa .stack { height: 30px; }
+.lupa .stack > button { cursor: pointer; }
+.lupa .stack > button:hover { filter: brightness(1.08); }
+.lrows { display: grid; }
+.lrow { font: inherit; color: inherit; text-align: left; background: none; border: 0; border-top: 1px solid var(--line); padding: 11px 6px; display: grid; grid-template-columns: 14px minmax(0, 1fr) auto auto auto; gap: 4px 14px; align-items: center; cursor: pointer; border-radius: 0; }
+.lrow:hover { background: var(--bg); }
+.lrow[disabled] { cursor: default; }
+.lrow[disabled]:hover { background: none; }
+.lrow .nm { font-size: 14.5px; font-weight: 500; }
+.lrow .nm small { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+.lrow .v { font-size: 14px; font-variant-numeric: tabular-nums; text-align: right; }
+.lrow .v.dim { color: var(--muted); min-width: 5ch; }
+.lrow .go { color: var(--accent); font-size: 18px; line-height: 1; width: 14px; }
+.lhead { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto auto auto; gap: 14px; padding: 0 6px 6px; font-size: 11.5px; color: var(--muted); letter-spacing: .04em; }
+.lhead span:nth-child(n+3) { text-align: right; }
+@media (max-width: 520px) {
+  .lrow, .lhead { grid-template-columns: 14px minmax(0, 1fr) auto auto; }
+  .lrow .v.dim:nth-of-type(3), .lhead span:nth-child(4) { display: none; }
+}
+.locked { border: 1px dashed var(--line-strong); border-radius: 14px; padding: 18px; display: grid; gap: 12px; }
+.locked h4 { font-family: var(--f-body); font-size: 1rem; letter-spacing: 0; }
+.locked p { font-size: 14px; color: var(--ink-2); }
+.ghosts { display: grid; gap: 6px; }
+.ghost { display: grid; grid-template-columns: minmax(0, 1fr) 90px; gap: 12px; align-items: center; font-size: 13.5px; color: var(--muted); }
+.ghost i { height: 10px; border-radius: 3px; background: repeating-linear-gradient(135deg, var(--track) 0 4px, transparent 4px 8px); border: 1px solid var(--line); }
+
+/* ---------- datos ---------- */
+.dtable { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14.5px; }
+.dtable th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 12px 10px 0; border-bottom: 2px solid var(--ink); }
+.dtable td { padding: 14px 12px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+.dtable td:first-child { color: var(--ink); font-weight: 600; width: 22%; }
+.state { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.state.have { background: var(--ink); color: var(--bg); }
+.state.ask { background: var(--accent-soft); color: var(--accent); }
+.state.pub { background: var(--chip); color: var(--ink-2); border: 1px solid var(--line-strong); }
+
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 40px; }
+.kpi { border-top: 1px solid var(--line-strong); padding-top: 14px; display: grid; gap: 6px; align-content: start; }
+.kpi h4 { font-family: var(--f-body); font-size: 1rem; letter-spacing: 0; }
+.kpi code { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); background: var(--chip); padding: 2px 6px; border-radius: 5px; width: fit-content; max-width: 100%; white-space: normal; }
+.kpi p { font-size: 14px; color: var(--ink-2); }
+.kpi .eg { font-size: 13.5px; color: var(--ink); }
+@media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .kpis { grid-template-columns: 1fr; } }
+
+/* ---------- ruta ---------- */
+.flow { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; counter-reset: st; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 6px; align-content: start; position: relative; counter-increment: st; }
+.step::before { content: counter(st); font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; color: var(--accent); line-height: 1; }
+.step h4 { font-family: var(--f-body); font-size: .95rem; letter-spacing: 0; line-height: 1.25; }
+.step p { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+.step.hl { border-color: var(--accent); }
+@media (max-width: 1000px) { .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.timeline { display: grid; gap: 0; margin-top: 48px; }
+.phase { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 20px; padding-block: 18px; border-top: 1px solid var(--line); }
+.phase .wk { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; }
+.phase .wk small { display: block; font-family: var(--f-body); font-weight: 500; font-size: 12.5px; color: var(--muted); }
+.phase h4 { font-family: var(--f-body); font-size: 1.05rem; letter-spacing: 0; }
+.phase p { color: var(--ink-2); font-size: 14.5px; }
+.gantt { position: relative; height: 8px; background: var(--track); border-radius: 4px; margin-top: 10px; }
+.gantt b { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 4px; }
+@media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 6px; } }
+
+.mtable { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px; }
+.mtable th, .mtable td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.mtable thead th { font-family: var(--f-display); font-size: 1.05rem; border-bottom: 2px solid var(--ink); }
+.mtable thead th span { color: var(--accent); margin-right: 6px; }
+.mtable tbody th { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); width: 16%; }
+.mtable td { color: var(--ink-2); }
+
+.callout { margin-top: 40px; background: var(--accent-soft); border-radius: 18px; padding: 26px; display: grid; gap: 10px; }
+.callout h3 { font-size: 1.5rem; color: var(--ink); }
+.callout p { color: var(--ink); max-width: 72ch; }
+
+.learn { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-top: 56px; }
+.learn > div { display: grid; gap: 12px; align-content: start; }
+.learn h3 { font-size: 1.35rem; }
+.learn p.src { font-size: 13px; color: var(--muted); }
+.pairs { display: grid; gap: 0; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding-block: 11px; border-top: 1px solid var(--line); font-size: 14px; }
+.pair .from { color: var(--muted); }
+.pair .to { color: var(--ink); }
+@media (max-width: 860px) { .learn { grid-template-columns: 1fr; } }
+
+.setup { margin-top: 56px; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px; align-items: start; }
+.setup ol { margin: 0; padding-left: 1.2em; display: grid; gap: 10px; color: var(--ink-2); }
+.setup ol b { color: var(--ink); }
+.code { position: relative; background: var(--door); color: var(--door-ink); border-radius: 14px; padding: 18px; overflow-x: auto; }
+.code pre { margin: 0; font-family: var(--f-mono); font-size: 12.5px; line-height: 1.55; }
+.code button { position: absolute; top: 10px; right: 10px; font: inherit; font-size: 12.5px; background: rgba(255,255,255,.1); color: var(--door-ink); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.code button:hover { background: rgba(255,255,255,.18); }
+@media (max-width: 860px) { .setup { grid-template-columns: 1fr; } }
+
+footer { margin-top: 80px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+
+#tip { position: fixed; z-index: 60; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); font-size: 13px; line-height: 1.35; padding: 7px 10px; border-radius: 8px; max-width: 260px; transform: translate(-50%, calc(-100% - 10px)); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
+</style>
+
+<div class="wrap">
+
+  <nav class="pill" aria-label="Secciones">
+    <a class="brand" href="#inicio">
+      <span class="brand-txt"><b>Peso a Peso</b><span>AP San José de Maipo</span></span>
+      <span class="brand-mark" aria-hidden="true"></span>
+    </a>
+    <div class="pill-links">
+      <a href="#lectura">Lectura</a>
+      <a href="#historia">Historia</a>
+      <a href="#propuestas">Propuestas</a>
+      <a href="#datos">Datos</a>
+      <a href="#ruta">Ruta</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="inicio">
+    <p class="eyebrow">Propuesta · Administración Provisional Educación Pública San José de Maipo · corte 30 sep 2026</p>
+    <h1>Detrás de cada peso <span class="accent">hay una sala de clases.</span></h1>
+    <p class="lead">El cuadro de ingresos y gastos ya tiene todo lo que un establecimiento necesita saber. Falta contarlo. Aquí está la lectura del informe de septiembre, la historia que cuentan sus números y tres formas de llevarla a cada escuela.</p>
+    <div class="doors">
+      <a class="door" href="#historia" id="door-red">
+        <svg class="ridge" viewBox="0 0 500 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 92 L48 62 L86 80 L140 30 L186 70 L228 52 L290 98 L340 46 L392 82 L446 58 L500 88 L500 120 Z" fill="var(--ridge)"/></svg>
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        <span class="eyebrow">Puerta 1 · La red completa</span>
+        <h2>Lo que entra y sale de la <em>AP</em></h2>
+        <div class="door-figs num">
+          <div><b>$4.054 MM</b><span>recibidos ene–sep</span></div>
+          <div><b>$4.972 MM</b><span>gastados ene–sep</span></div>
+        </div>
+      </a>
+      <a class="door" href="#escuela" id="door-esc">
+        <svg class="ridge" viewBox="0 0 500 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 70 L60 96 L118 44 L170 74 L214 36 L268 84 L322 60 L370 92 L430 50 L500 78 L500 120 Z" fill="var(--ridge)"/></svg>
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        <span class="eyebrow">Puerta 2 · Mi establecimiento</span>
+        <h2>Escuela Básica F&#8209;N°&nbsp;638 <em>El Melocotón</em></h2>
+        <div class="door-figs num">
+          <div><b>$384,5 MM</b><span>recibidos · RBD 10529</span></div>
+          <div><b>$423,9 MM</b><span>gastados</span></div>
+        </div>
+      </a>
+    </div>
+    <p class="meta-line"><span>MM = millones de pesos</span><span>Período: 1 de enero al 30 de septiembre de 2026 (75% del año)</span><span>Fuente: cuadro de ingresos y gastos de la AP</span></p>
+  </header>
+
+  <!-- ===================== LECTURA ===================== -->
+  <section class="block" id="lectura">
+    <div class="sec-head">
+      <p class="eyebrow">1 · Lectura del informe</p>
+      <h2>Lo que dice el cuadro, <span class="accent">en seis frases</span></h2>
+      <p>Antes de diseñar nada, leí el cuadro de la red y el del RBD 10529 fila por fila y recalculé cada porcentaje. Todos cuadran con la planilla. Estas son las cifras que sostienen la historia.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><span class="lbl">Ingresos de la red</span><span class="val num">$4.054<small>MM</small></span><span class="sub">≈ $450 MM al mes</span></div>
+      <div class="tile"><span class="lbl">Gastos de la red</span><span class="val num">$4.972<small>MM</small></span><span class="sub">≈ $552 MM al mes</span></div>
+      <div class="tile"><span class="lbl">Ejecución total</span><span class="val num">122,6%</span><span class="sub">se gastan $122,6 por cada $100 recibidos</span></div>
+      <div class="tile"><span class="lbl">Sueldos sobre ingresos</span><span class="val num">104,4%</span><span class="sub">la planilla supera todo lo que entra</span></div>
+    </div>
+
+    <div class="findings">
+      <article class="finding">
+        <span class="chip">Contexto</span>
+        <h3>La educación es gente: 85 de cada 100 pesos gastados son sueldos</h3>
+        <p><span class="num">$4.232 MM</span> en sueldos, <span class="num">$659 MM</span> en compras y <span class="num">$80 MM</span> en honorarios. Cualquier conversación sobre el déficit es, en el fondo, una conversación sobre dotación.</p>
+      </article>
+      <article class="finding">
+        <span class="chip">Tensión</span>
+        <h3>Cada mes salen unos $102 MM más de lo que entra</h3>
+        <p>Entre enero y septiembre la red recibió <span class="num">$4.054 MM</span> y gastó <span class="num">$4.972 MM</span>. La brecha de flujo es <span class="num">−$917 MM</span>.</p>
+      </article>
+      <article class="finding">
+        <span class="chip">Tensión</span>
+        <h3>La Subvención General no alcanza ni para su propia planilla</h3>
+        <p>Sus sueldos equivalen al <span class="num">186,2%</span> de lo que recibe y su ejecución llega a <span class="num">226,7%</span>. Cubre solo el <span class="num">44%</span> de lo que gasta.</p>
+      </article>
+      <article class="finding">
+        <span class="chip">Revisar</span>
+        <h3>Bonificaciones: $1.150 MM con apenas 15,5% imputado</h3>
+        <p>Es probable que este dinero financie sueldos registrados en General. Si se leen juntas, el gasto en personal baja de <span class="num">186%</span> a <span class="num">116,7%</span>. Sigue sobre 100%, pero la foto cambia.</p>
+      </article>
+      <article class="finding">
+        <span class="chip">Oportunidad</span>
+        <h3>$394 MM de la SEP esperan llegar a la sala</h3>
+        <p>Con el <span class="num">75%</span> del año transcurrido, la SEP va en <span class="num">46,7%</span> de ejecución. Sumando Mantenimiento y Pro Retención, hay <span class="num">$446 MM</span> con destino definido sin usar.</p>
+      </article>
+      <article class="finding">
+        <span class="chip">Tensión</span>
+        <h3>PIE gasta más de lo que recibe</h3>
+        <p>Ejecución de <span class="num">115,7%</span> y saldo de <span class="num">−$70,5 MM</span>. En El Melocotón, en cambio, el PIE está sano: <span class="num">88,4%</span> y <span class="num">+$5,8 MM</span>.</p>
+      </article>
+    </div>
+
+    <div class="checks">
+      <p class="eyebrow">Antes de mostrárselo a un cliente</p>
+      <h3>Tres cosas que corregiría en la planilla</h3>
+      <ol>
+        <li><b>La columna Saldo no es Ingresos − Gastos.</b> En la red, la resta da <span class="num">−$917,4 MM</span>, pero la suma de la columna Saldo da <span class="num">−$28,3 MM</span>. Hay <span class="num">$889 MM</span> que no se explican con los flujos del período, casi todos en General (<span class="num">$691 MM</span>). Lo más probable es que sea saldo inicial 2026 o arrastre; necesita su propia columna para que el cliente pueda reconstruir la cifra.</li>
+        <li><b>FAEP 2025 y Reactivación tienen ingreso $0 pero gasto y saldo positivo.</b> Son fondos de arrastre. Conviene rotularlos así, porque en un gráfico parecen gasto sin financiamiento.</li>
+        <li><b>Falta definir los indicadores en la misma hoja.</b> El "% de ingresos utilizados en personal" usa solo Sueldos (no Honorarios), y la Ejecución total de la red está en blanco (es <span class="num">122,6%</span>). En el cuadro del RBD, Bonificaciones tiene <span class="num">$136,4 MM</span> de ingreso sin ningún gasto asignado.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORIA ===================== -->
+  <section class="block" id="historia">
+    <div class="sec-head">
+      <p class="eyebrow">2 · La historia</p>
+      <h2>Seis actos, <span class="accent">de la red a la sala</span></h2>
+      <p>Una buena historia de datos va de lo grande a lo pequeño y termina en una decisión. Esta es la secuencia que propongo. Las tres propuestas de más abajo son tres formas de contarla.</p>
+    </div>
+
+    <!-- Acto I -->
+    <article class="act">
+      <div class="act-text">
+        <span class="act-num">Acto I</span>
+        <h3>Lo que llega</h3>
+        <p class="big num">$4.054 MM<small>recibidos por la red entre enero y septiembre</small></p>
+        <p>Cuatro de cada diez pesos vienen de la Subvención General. Casi tres, de bonificaciones e incrementos remuneracionales. La SEP y el PIE suman otros tres.</p>
+      </div>
+      <figure class="figure" style="margin:0">
+        <div><p class="fig-title">De dónde viene el dinero</p><p class="fig-sub">Ingresos por fuente, % del total recibido</p></div>
+        <div class="stack" role="img" aria-label="General 41,3%, Bonificaciones 28,4%, SEP 17,4%, PIE 11,5%, Otros 1,4%">
+          <div class="f-general" style="flex:41.31 1 0" data-tip="Subvención General · $1.674,9 MM · 41,3%" tabindex="0">41%</div>
+          <div class="f-bonif" style="flex:28.36 1 0" data-tip="Bonificaciones e incrementos · $1.149,7 MM · 28,4%" tabindex="0">28%</div>
+          <div class="f-sep" style="flex:17.42 1 0" data-tip="SEP · $706,2 MM · 17,4%" tabindex="0">17%</div>
+          <div class="f-pie" style="flex:11.49 1 0" data-tip="PIE · $465,9 MM · 11,5%" tabindex="0">11%</div>
+          <div class="f-otros" style="flex:1.42 1 0" data-tip="Otros (Mantenimiento y Pro Retención) · $57,6 MM · 1,4%" tabindex="0"></div>
+        </div>
+        <table class="ktable">
+          <thead><tr><th>Fuente</th><th class="r">Monto</th><th class="r">% del total</th></tr></thead>
+          <tbody>
+            <tr><td><span class="legend"><span><i class="sw f-general"></i>Subvención General</span></span></td><td class="r">$1.674,9 MM</td><td class="r">41,3%</td></tr>
+            <tr><td><span class="legend"><span><i class="sw f-bonif"></i>Bonificaciones e incrementos</span></span></td><td class="r">$1.149,7 MM</td><td class="r">28,4%</td></tr>
+            <tr><td><span class="legend"><span><i class="sw f-sep"></i>SEP</span></span></td><td class="r">$706,2 MM</td><td class="r">17,4%</td></tr>
+            <tr><td><span class="legend"><span><i class="sw f-pie"></i>PIE</span></span></td><td class="r">$465,9 MM</td><td class="r">11,5%</td></tr>
+            <tr><td><span class="legend"><span><i class="sw f-otros"></i>Mantenimiento y Pro Retención</span></span></td><td class="r">$57,6 MM</td><td class="r">1,4%</td></tr>
+          </tbody>
+        </table>
+        <p class="source">FAEP 2025 y Reactivación no registran ingresos en 2026.</p>
+      </figure>
+    </article>
+
+    <!-- Acto II -->
+    <article class="act">
+      <div class="act-text">
+        <span class="act-num">Acto II</span>
+        <h3>A dónde se va</h3>
+        <p>Si la red recibiera <b>$100</b>, gastaría <b>$122,6</b>: $104,4 en sueldos, $16,3 en compras y $2,0 en honorarios. Solo los sueldos ya pasan la línea.</p>
+        <p>Los cuadros bajo la línea se han cubierto, en parte, con saldos de arrastre. Por eso la columna Saldo muestra −$28,3 MM y no −$917 MM. Ese colchón no se repite todos los años.</p>
+      </div>
+      <figure class="figure" style="margin:0" id="fig-unit">
+        <div class="fig-head">
+          <div><p class="fig-title">De cada $100 que entran, cuántos salen</p><p class="fig-sub">Cada cuadro es $1 · enero a septiembre 2026</p></div>
+          <div class="seg" role="group" aria-label="Alcance del gráfico">
+            <button type="button" id="unit-red" data-scope="red" aria-pressed="true">Red AP</button>
+            <button type="button" id="unit-esc" data-scope="esc" aria-pressed="false">El Melocotón</button>
+          </div>
+        </div>
+        <div class="legend" id="unit-legend"></div>
+        <div class="unit-wrap">
+          <div class="unit-grid" id="unit-grid" role="img"></div>
+          <div class="unit-side"><b class="num" id="unit-big">$122,6</b><span id="unit-cap">gastados por cada $100 recibidos</span></div>
+        </div>
+        <p class="fig-note" id="unit-note"></p>
+      </figure>
+    </article>
+
+    <!-- Acto III -->
+    <article class="act">
+      <div class="act-text">
+        <span class="act-num">Acto III</span>
+        <h3>Dónde aprieta</h3>
+        <p>La SEP usa el 40% de sus ingresos en personal. El PIE, el 115%. La Subvención General, el 186%: por cada peso que recibe, paga casi dos en sueldos.</p>
+        <p>La raya muestra el límite natural: todo lo que entra. Si las bonificaciones se leen como parte del financiamiento de General, el exceso se reduce, pero no desaparece.</p>
+      </div>
+      <figure class="figure" style="margin:0">
+        <div><p class="fig-title">Sueldos como % de los ingresos de cada fuente</p><p class="fig-sub">Red AP · la raya negra marca el 100%</p></div>
+        <div class="rows">
+          <div class="row head"><span class="lab"></span><div class="axis num"><span style="left:0">0%</span><span style="left:25%">50%</span><span class="mark" style="left:50%">100%</span><span style="left:75%">150%</span><span style="left:100%">200%</span></div><span class="val"></span></div>
+          <div class="row"><span class="lab">SEP</span><div class="track"><div class="bar f-sep" style="width:20.08%" data-tip="SEP · sueldos $283,6 MM / ingresos $706,2 MM" tabindex="0"></div><i class="ref" style="left:50%"></i></div><span class="val"><b>40,2%</b></span></div>
+          <div class="row"><span class="lab">PIE</span><div class="track"><div class="bar f-pie" style="width:57.64%" data-tip="PIE · sueldos $537,0 MM / ingresos $465,9 MM" tabindex="0"></div><i class="ref" style="left:50%"></i></div><span class="val"><b>115,3%</b></span></div>
+          <div class="row"><span class="lab">Subvención General</span><div class="track"><div class="bar f-general" style="width:93.11%" data-tip="General · sueldos $3.118,9 MM / ingresos $1.674,9 MM" tabindex="0"></div><i class="ref" style="left:50%"></i></div><span class="val"><b>186,2%</b></span></div>
+          <div class="row"><span class="lab">Bonificaciones</span><div class="track"><div class="bar f-bonif" style="width:7.76%" data-tip="Bonificaciones · sueldos $178,5 MM / ingresos $1.149,7 MM" tabindex="0"></div><i class="ref" style="left:50%"></i></div><span class="val"><b>15,5%</b></span></div>
+          <div class="row sep"><span class="lab">General + Bonificaciones<small>si se leen juntas</small></span><div class="track"><div class="bar f-general hatched" style="width:58.37%" data-tip="Sueldos $3.297,4 MM / ingresos $2.824,6 MM" tabindex="0"></div><i class="ref" style="left:50%"></i></div><span class="val"><b>116,7%</b></span></div>
+        </div>
+        <p class="source">% de ingresos utilizados en personal = Sueldos ÷ Ingresos de la misma fuente (no incluye honorarios).</p>
+      </figure>
+    </article>
+
+    <!-- Acto IV -->
+    <article class="act">
+      <div class="act-text">
+        <span class="act-num">Acto IV</span>
+        <h3>La plata que espera</h3>
+        <p class="big num">$446 MM<small>con destino definido y sin usar al 30 de septiembre</small></p>
+        <p>Es la paradoja de la red: la cuenta general está en rojo mientras la SEP, Mantenimiento y Pro Retención van muy por debajo del ritmo del año. Al ritmo actual, la SEP de la red alcanza para 10,7 meses más.</p>
+      </div>
+      <figure class="figure" style="margin:0">
+        <div><p class="fig-title">Ejecución de fondos con destino definido</p><p class="fig-sub">Red AP · gasto ÷ ingreso del año · la raya marca el 75% del año transcurrido</p></div>
+        <div class="rows">
+          <div class="row head"><span class="lab"></span><div class="axis num"><span style="left:0">0%</span><span style="left:50%">50%</span><span class="mark" style="left:75%">75% del año</span><span style="left:100%">100%</span></div><span class="val"></span></div>
+          <div class="row"><span class="lab">SEP<small>$706,2 MM recibidos</small></span><div class="track bg"><div class="bar f-sep" style="width:46.72%" data-tip="SEP · ejecutado $330,0 MM · saldo $393,7 MM" tabindex="0"></div><i class="ref" style="left:75%"></i></div><span class="val"><b>46,7%</b><br>$393,7 MM libres</span></div>
+          <div class="row"><span class="lab">Mantenimiento<small>$31,2 MM recibidos</small></span><div class="track bg"><div class="bar f-otros" style="width:16.37%" data-tip="Mantenimiento · ejecutado $5,1 MM · saldo $26,1 MM" tabindex="0"></div><i class="ref" style="left:75%"></i></div><span class="val"><b>16,4%</b><br>$26,1 MM libres</span></div>
+          <div class="row"><span class="lab">Pro Retención<small>$26,4 MM recibidos</small></span><div class="track bg" data-tip="Pro Retención · sin gastos registrados · saldo $26,4 MM" tabindex="0"><i class="ref" style="left:75%"></i></div><span class="val"><b>0%</b><br>$26,4 MM libres</span></div>
+        </div>
+        <p class="fig-note">Para ir al ritmo del año, la SEP de la red debería llevar unos $530 MM ejecutados. Le faltan cerca de $200 MM.</p>
+      </figure>
+    </article>
+
+    <!-- Acto V -->
+    <article class="act" id="escuela">
+      <div class="act-text">
+        <span class="act-num">Acto V</span>
+        <h3>Tu escuela: El Melocotón</h3>
+        <p>El RBD 10529 recibe el 9,5% de los ingresos de la red. Está más sano que el promedio: gasta en personal el 90,9% de lo que recibe, contra el 104,4% de la red, y su PIE tiene superávit.</p>
+        <p>Pero su Subvención General cubre solo el 37% de su costo, y la SEP avanza aún más lento que en la red.</p>
+        <div class="facts">
+          <div class="fact"><b class="num">36,8%</b><span>del gasto de General cubierto por su ingreso</span></div>
+          <div class="fact"><b class="num">17,6 meses</b><span>de SEP disponible al ritmo actual de gasto</span></div>
+          <div class="fact"><b class="num">+$5,8 MM</b><span>saldo del PIE</span></div>
+          <div class="fact"><b class="num">$136,4 MM</b><span>de bonificaciones sin gasto asignado</span></div>
+        </div>
+      </div>
+      <figure class="figure" style="margin:0">
+        <div class="fig-head">
+          <div><p class="fig-title">El Melocotón frente a la red</p><p class="fig-sub">Mismo indicador, misma escala · la raya marca el 100%</p></div>
+          <div class="legend"><span><i class="sw dot"></i>El Melocotón</span><span><i class="sw ring"></i>Red AP</span></div>
+        </div>
+        <div class="rows" id="dumbbell"></div>
+        <p class="fig-note">En cuatro de cinco indicadores la escuela está más cerca del 100% que la red. La excepción es la Subvención General.</p>
+      </figure>
+    </article>
+
+    <!-- Acto VI -->
+    <article class="act">
+      <div class="act-text">
+        <span class="act-num">Acto VI</span>
+        <h3>Lo que viene: octubre a diciembre</h3>
+        <p>Toda historia de datos termina en una decisión. Para El Melocotón, quedan tres conversaciones para la próxima reunión con el equipo directivo.</p>
+        <p class="source">Montos calculados con el corte al 30 de septiembre. La forma de imputar cada gasto depende de la normativa de cada subvención.</p>
+      </div>
+      <div class="actions">
+        <div class="action"><span class="amt num">$26,4 MM</span><h4>Ponerse al día con la SEP</h4><p>Es lo que falta para llegar al 75% de ejecución. Hay $42,5 MM disponibles y el PME debería decir en qué acciones se usan antes de diciembre.</p></div>
+        <div class="action"><span class="amt num">$136,4 MM</span><h4>Asignar las bonificaciones</h4><p>Si financian sueldos registrados en General, el déficit de General baja de −$225,6 MM a −$89,2 MM. Primero hay que confirmar la imputación.</p></div>
+        <div class="action"><span class="amt num">$1,6 MM</span><h4>Usar los fondos pequeños antes del verano</h4><p>Mantenimiento tiene $0,84 MM sin usar y Pro Retención $0,72 MM. Poco dinero, pero muy visible para la comunidad.</p></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== PROPUESTAS ===================== -->
+  <section class="block" id="propuestas">
+    <div class="sec-head">
+      <p class="eyebrow">3 · Tres propuestas</p>
+      <h2>Tres formas de llevar <span class="accent">la historia a cada escuela</span></h2>
+      <p>Las tres usan la misma base de datos y la misma secuencia de seis actos. Cambian el formato, el público y cuánto dato extra necesitan.</p>
+    </div>
+
+    <div class="compare">
+      <a class="pcard" href="#prop-a" id="card-a">
+        <span class="letter">A</span>
+        <h3>El viaje de un peso</h3>
+        <p>Una página por establecimiento que se recorre con el scroll, como una película.</p>
+        <dl><dt>Para</dt><dd>Comunidad escolar y cuenta pública</dd><dt>Datos</dt><dd>El cuadro actual + matrícula</dd><dt>Plazo</dt><dd>3 a 4 semanas</dd></dl>
+      </a>
+      <a class="pcard" href="#prop-b" id="card-b">
+        <span class="letter">B</span>
+        <h3>Ficha de salud financiera</h3>
+        <p>Una hoja mensual por RBD con semáforos y tres mensajes, en web, PDF e imagen.</p>
+        <dl><dt>Para</dt><dd>Director/a y equipo de gestión</dd><dt>Datos</dt><dd>Solo el cuadro actual</dd><dt>Plazo</dt><dd>1 a 2 semanas</dd></dl>
+      </a>
+      <a class="pcard" href="#prop-c" id="card-c">
+        <span class="letter">C</span>
+        <h3>La lupa</h3>
+        <p>Un explorador que baja de la red al RBD, a la subvención, al tipo de gasto y a la cuenta.</p>
+        <dl><dt>Para</dt><dd>Profesional de gestión y sostenedor</dd><dt>Datos</dt><dd>Libro de egresos y remuneraciones</dd><dt>Plazo</dt><dd>6 a 8 semanas</dd></dl>
+      </a>
+    </div>
+
+    <!-- Propuesta A -->
+    <div class="proposal" id="prop-a">
+      <div class="p-head">
+        <span class="letter" aria-hidden="true">A</span>
+        <h3>El viaje de un peso</h3>
+        <p>Cada establecimiento tiene su propia landing. Al bajar, el peso avanza: llega, se reparte, choca con el límite y termina en una decisión. Al subir, la historia retrocede.</p>
+      </div>
+      <div class="p-body">
+        <dl class="spec">
+          <div><dt>Para quién</dt><dd>Director/a, consejo escolar y apoderados. Ideal para la <b>cuenta pública</b> o la reunión de cierre de año.</dd></div>
+          <div><dt>La historia que cuenta</dt><dd>Los seis actos, uno por pantalla. Cada pantalla tiene un solo número protagonista y una frase.</dd></div>
+          <div><dt>Datos que usa</dt><dd>El cuadro por RBD, más <b>matrícula y asistencia</b> para traducir montos a "pesos por estudiante".</dd></div>
+          <div><dt>Cómo se construye</dt><dd>
+            <ul>
+              <li>Astro + GSAP ScrollTrigger + Lenis, el mismo stack del video de midudev.</li>
+              <li>D3 para que los cuadros del Acto II se reagrupen por subvención al hacer scroll.</li>
+              <li>Un JSON por RBD generado desde el Excel; una plantilla para todos.</li>
+              <li>Fotos reales de cada escuela, con permiso, como fondo del Acto I.</li>
+            </ul></dd></div>
+          <div><dt>Esfuerzo</dt><dd><b>3 a 4 semanas</b> para la plantilla y la primera escuela; después, cada RBD sale automático.</dd></div>
+          <div><dt>Riesgo</dt><dd>Si omite los actos incómodos (III y IV), se lee como propaganda. La historia tiene que mostrar la tensión.</dd></div>
+        </dl>
+        <div class="figure" style="gap:14px">
+          <div><p class="fig-title">Storyboard con datos de El Melocotón</p><p class="fig-sub">Cuatro pantallas de la versión móvil · desliza para ver todas</p></div>
+          <div class="board">
+            <div class="board-row">
+              <figure class="frame" style="margin:0">
+                <div class="phone dark">
+                  <span class="t-eb">Escuela El Melocotón · 2026</span>
+                  <span class="t-big num">$384,5 millones</span>
+                  <span class="t-p">llegaron entre enero y septiembre para educar a los niños y niñas del Cajón del Maipo.</span>
+                  <svg class="ridge" viewBox="0 0 500 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 80 L70 40 L130 76 L200 22 L270 70 L330 48 L400 90 L460 56 L500 74 L500 120 Z" fill="var(--ridge)"/></svg>
+                </div>
+                <figcaption><b>Pantalla 1 · Lo que llega</b>Foto de la escuela y el monto total.</figcaption>
+              </figure>
+              <figure class="frame" style="margin:0">
+                <div class="phone">
+                  <span class="t-eb">De cada $100</span>
+                  <span class="t-h">salieron $110,2</span>
+                  <span class="t-p">$90,9 en sueldos, $18,7 en compras, $0,7 en honorarios.</span>
+                  <div class="mini" id="mini-grid" aria-hidden="true"></div>
+                </div>
+                <figcaption><b>Pantalla 2 · A dónde va</b>Los cuadros caen uno a uno con el scroll.</figcaption>
+              </figure>
+              <figure class="frame" style="margin:0">
+                <div class="phone">
+                  <span class="t-eb">Subvención General</span>
+                  <span class="t-h">Cubre el 37% de lo que cuesta</span>
+                  <span class="t-p">Recibe $131,1 MM y gasta $356,7 MM. El resto sale de otras fuentes.</span>
+                  <div class="meter"><b style="width:36.8%"></b></div>
+                </div>
+                <figcaption><b>Pantalla 3 · Dónde aprieta</b>Los cuadros se reagrupan por subvención.</figcaption>
+              </figure>
+              <figure class="frame" style="margin:0">
+                <div class="phone">
+                  <span class="t-eb">SEP · estudiantes prioritarios</span>
+                  <span class="t-big num" style="font-size:1.3rem">$42,5 MM</span>
+                  <span class="t-p">esperan transformarse en apoyo. Al ritmo actual alcanzan para 17,6 meses.</span>
+                  <span class="cta">Ver el plan de octubre a diciembre</span>
+                </div>
+                <figcaption><b>Pantalla 4 · Qué hacemos</b>Cierra con la decisión y quién responde.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Propuesta B -->
+    <div class="proposal" id="prop-b">
+      <div class="p-head">
+        <span class="letter" aria-hidden="true">B</span>
+        <h3>Ficha de salud financiera</h3>
+        <p>Una sola hoja por establecimiento, cada mes. Dice cómo está, comparado con qué, y qué conversar. Se lee en dos minutos y se manda por correo o WhatsApp.</p>
+      </div>
+      <div class="p-body">
+        <dl class="spec">
+          <div><dt>Para quién</dt><dd>Director/a y equipo de gestión, todos los meses. También sirve como anexo del informe al sostenedor.</dd></div>
+          <div><dt>La historia que cuenta</dt><dd>Una frase titular, cinco indicadores con semáforo frente a la red y <b>tres cosas para conversar</b>.</dd></div>
+          <div><dt>Datos que usa</dt><dd>Solo el cuadro que ya preparas. Ningún dato nuevo.</dd></div>
+          <div><dt>Cómo se construye</dt><dd>
+            <ul>
+              <li>Python (pandas + openpyxl) lee el Excel y valida que los totales cuadren.</li>
+              <li>Los umbrales del semáforo viven en una hoja del mismo Excel, editables por ti.</li>
+              <li>Una plantilla HTML genera la web, el PDF y la imagen para WhatsApp con Chrome sin interfaz.</li>
+              <li>Las tres frases salen de reglas fijas; un modelo de IA puede redactarlas, siempre limitado a los números de la ficha.</li>
+            </ul></dd></div>
+          <div><dt>Esfuerzo</dt><dd><b>1 a 2 semanas</b> para el piloto con tres establecimientos.</dd></div>
+          <div><dt>Riesgo</dt><dd>Umbrales mal calibrados asustan sin motivo. Hay que acordarlos contigo antes del primer envío.</dd></div>
+        </dl>
+        <article class="ficha" aria-label="Maqueta de ficha para El Melocotón">
+          <div class="ficha-top">
+            <div><p class="eyebrow">Ficha financiera · septiembre 2026</p><h4>Escuela Básica F-N° 638 El Melocotón</h4></div>
+            <div class="rbd">RBD<b>10529</b>corte 30-09-2026</div>
+          </div>
+          <p class="headline">Por cada $100 que recibió, gastó <span class="num">$110</span>. Mejor que la red, pero sobre el límite.</p>
+          <div class="tscroll">
+            <table class="ktable">
+              <thead><tr><th>Indicador</th><th class="r">Escuela</th><th class="r">Red</th><th>Estado</th></tr></thead>
+              <tbody id="ficha-rows"></tbody>
+            </table>
+          </div>
+          <div class="ficha-cols">
+            <div>
+              <h5>Tres cosas para conversar</h5>
+              <ol>
+                <li><b>SEP:</b> faltan $26,4 MM para ir al ritmo del año. ¿Qué acciones del PME se ejecutan antes de diciembre?</li>
+                <li><b>Bonificaciones:</b> $136,4 MM sin gasto asignado. Confirmar si financian sueldos de General.</li>
+                <li><b>PIE sano:</b> 88,4% de ejecución y saldo positivo. Vale la pena contarlo.</li>
+              </ol>
+            </div>
+            <div>
+              <h5>Sueldos sobre ingresos</h5>
+              <div class="rows" id="ficha-bars"></div>
+            </div>
+          </div>
+          <p class="foot">Fuente: cuadro de ingresos y gastos de la AP, corte 30-09-2026. Umbrales propuestos, por calibrar: personal ≤ 80% sano, 80–100% atención, sobre 100% crítico · ritmo SEP hasta 10 puntos bajo el % del año sano, 10–25 atención, más de 25 crítico.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Propuesta C -->
+    <div class="proposal" id="prop-c">
+      <div class="p-head">
+        <span class="letter" aria-hidden="true">C</span>
+        <h3>La lupa</h3>
+        <p>Un explorador para bajar desde la red hasta el gasto más pequeño. Cada clic acerca la lupa un nivel y muestra montos que en el cuadro general no se ven.</p>
+      </div>
+      <div class="p-body">
+        <dl class="spec">
+          <div><dt>Para quién</dt><dd>Tú, como profesional de gestión, y el sostenedor. En reuniones con clientes sirve para responder "¿y eso en qué se gastó?" en vivo.</dd></div>
+          <div><dt>La historia que cuenta</dt><dd>La que el usuario arma. Red → establecimiento → subvención → tipo de gasto → cuenta → proveedor.</dd></div>
+          <div><dt>Datos que usa</dt><dd>Los dos primeros niveles salen del cuadro actual. Los siguientes necesitan el <b>libro de egresos</b> y la <b>planilla de remuneraciones por función</b>.</dd></div>
+          <div><dt>Cómo se construye</dt><dd>
+            <ul>
+              <li>Next.js o Astro con DuckDB-WASM: los datos viajan en un archivo Parquet y se consultan en el navegador.</li>
+              <li>Acceso por establecimiento: cada director ve solo su RBD.</li>
+              <li>Remuneraciones solo agregadas por función, sin nombres ni RUT.</li>
+            </ul></dd></div>
+          <div><dt>Esfuerzo</dt><dd><b>6 a 8 semanas</b>, más el tiempo de ordenar el detalle contable.</dd></div>
+          <div><dt>Riesgo</dt><dd>Exige datos que hoy no están ordenados. Sin ellos, la lupa se queda en dos niveles.</dd></div>
+        </dl>
+        <div class="lupa" id="lupa">
+          <div class="lupa-top">
+            <div class="seg" role="group" aria-label="Alcance de la lupa">
+              <button type="button" id="lupa-red" data-scope="red" aria-pressed="true">Red AP</button>
+              <button type="button" id="lupa-esc" data-scope="esc" aria-pressed="false">El Melocotón</button>
+            </div>
+            <nav class="crumbs" id="lupa-crumbs" aria-label="Nivel de la lupa"></nav>
+          </div>
+          <p class="lupa-total" id="lupa-total"></p>
+          <div class="stack" id="lupa-bar"></div>
+          <div id="lupa-list"></div>
+          <p class="source">Prototipo funcional con datos reales del corte de septiembre. Toca una fila o un segmento para bajar un nivel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DATOS ===================== -->
+  <section class="block" id="datos">
+    <div class="sec-head">
+      <p class="eyebrow">4 · Datos</p>
+      <h2>Qué datos analizaría <span class="accent">y qué pregunta responde cada uno</span></h2>
+      <p>El cuadro actual alcanza para las propuestas A y B. Para que la historia baje hasta el gasto pequeño, hay que pedir algunas fuentes más.</p>
+    </div>
+    <div class="tscroll">
+      <table class="dtable">
+        <thead><tr><th>Fuente</th><th>Qué contiene</th><th>Pregunta que responde</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Cuadro de ingresos y gastos</td><td>Ingresos, compras, honorarios y sueldos por subvención, para la red y por RBD.</td><td>¿Cuánto entra, cuánto sale y en qué gran categoría?</td><td><span class="state have">Ya lo tienes</span></td></tr>
+          <tr><td>Saldo inicial 2026 por subvención</td><td>Arrastre del 31-12-2025 de cada fondo.</td><td>¿Por qué el saldo no es ingresos menos gastos? (los $889 MM)</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>Ingresos y gastos mes a mes</td><td>El mismo cuadro, pero de enero a septiembre por separado.</td><td>¿Se acelera o se frena el gasto? ¿Cómo cerramos en diciembre?</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>Libro de egresos</td><td>Cada pago con fecha, cuenta de rendición, proveedor, RBD y subvención.</td><td>¿En qué se fueron los $659 MM de compras? ¿Qué proveedores concentran el gasto?</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>Remuneraciones por función</td><td>Totales por RBD y función: docentes, directivos, asistentes, profesionales PIE, reemplazos. Sin datos personales.</td><td>¿Por qué la General no alcanza? ¿Cuánto cuesta una hora lectiva?</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>Matrícula, asistencia y prioritarios</td><td>Por RBD y mes, desde datos abiertos del Mineduc y registros internos.</td><td>¿Cuánto se gasta por estudiante? ¿Cuánto vale un punto de asistencia?</td><td><span class="state pub">Pública</span></td></tr>
+          <tr><td>Presupuesto 2026 aprobado</td><td>Lo planificado por subvención y RBD.</td><td>¿Vamos según lo planeado, no solo según lo recibido?</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>PME y acciones SEP</td><td>Acciones planificadas, responsables y montos.</td><td>¿En qué se convierten los $42,5 MM de SEP de El Melocotón?</td><td><span class="state ask">Pedir</span></td></tr>
+          <tr><td>Rendiciones de cuenta 2023–2025</td><td>Lo rendido a la Superintendencia de Educación en años anteriores.</td><td>¿El déficit de General es nuevo o viene de antes?</td><td><span class="state pub">Pública</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><h4>Sueldos sobre ingresos</h4><code>sueldos ÷ ingresos</code><p>El indicador que ya usas. Lo calcularía también uniendo General y Bonificaciones.</p><span class="eg num">Escuela 90,9% · Red 104,4%</span></div>
+      <div class="kpi"><h4>Ritmo de ejecución</h4><code>ejecución − % del año transcurrido</code><p>Distingue un fondo atrasado de uno que se gasta al final del año por diseño.</p><span class="eg num">SEP escuela: 33,9% − 75% = −41 puntos</span></div>
+      <div class="kpi"><h4>Cobertura de General</h4><code>ingresos General ÷ gasto General</code><p>Cuánto del costo de la subvención se paga con su propio ingreso.</p><span class="eg num">Escuela 36,8% · Red 44,1%</span></div>
+      <div class="kpi"><h4>Meses de autonomía</h4><code>saldo ÷ gasto mensual promedio</code><p>Convierte un saldo en tiempo, que se entiende mejor que un monto.</p><span class="eg num">SEP escuela 17,6 meses · red 10,7</span></div>
+      <div class="kpi"><h4>Gasto por estudiante</h4><code>gasto ÷ matrícula</code><p>Necesita la matrícula. Permite comparar escuelas de distinto tamaño.</p><span class="eg">Pendiente de matrícula</span></div>
+      <div class="kpi"><h4>Concentración de compras</h4><code>top 10 proveedores ÷ compras</code><p>Necesita el libro de egresos. Muestra dependencia de pocos proveedores.</p><span class="eg">Pendiente de libro de egresos</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== RUTA ===================== -->
+  <section class="block" id="ruta">
+    <div class="sec-head">
+      <p class="eyebrow">5 · Cómo lo llevaría</p>
+      <h2>Del Excel del mes <span class="accent">a un link por escuela</span></h2>
+      <p>Un solo flujo alimenta las tres propuestas. Lo importante es que el Excel siga siendo tu herramienta y la web se actualice sola.</p>
+    </div>
+
+    <div class="flow">
+      <div class="step"><h4>Excel del mes</h4><p>El cuadro que ya preparas, sin cambiar tu forma de trabajo.</p></div>
+      <div class="step"><h4>Lectura y cuadre</h4><p>Un script lee cada hoja y avisa si un total no cuadra o falta el saldo inicial.</p></div>
+      <div class="step"><h4>Tabla larga</h4><p>Una fila por RBD, fondo, tipo de gasto, mes y monto.</p></div>
+      <div class="step"><h4>Indicadores y frases</h4><p>Porcentajes, ritmo, semáforos y las tres frases de cada ficha.</p></div>
+      <div class="step"><h4>Plantillas</h4><p>Ficha (B), historia (A) y lupa (C) leen el mismo archivo.</p></div>
+      <div class="step hl"><h4>Revisión en Brave</h4><p>Chrome DevTools MCP abre cada página, toma capturas en móvil, revisa la consola y mide con Lighthouse.</p></div>
+      <div class="step"><h4>Publicación</h4><p>Un link por RBD, más el PDF y la imagen de la ficha.</p></div>
+    </div>
+
+    <div class="timeline">
+      <div class="phase"><div class="wk">Semana 1<small>base</small></div><div><h4>Modelo de datos y cuadre</h4><p>Resolver la columna Saldo, rotular fondos de arrastre y fijar la definición de cada indicador.</p><div class="gantt"><b style="left:0;width:8.33%"></b></div></div></div>
+      <div class="phase"><div class="wk">Semanas 2–3<small>propuesta B</small></div><div><h4>Ficha piloto con tres establecimientos</h4><p>Calibrar umbrales contigo y probar el envío con tres directores antes de abrirla a toda la red.</p><div class="gantt"><b style="left:8.33%;width:16.67%"></b></div></div></div>
+      <div class="phase"><div class="wk">Semanas 4–6<small>propuesta A</small></div><div><h4>Historia para el cierre de año</h4><p>Lista para las reuniones de diciembre y la cuenta pública, con la misma base de la ficha.</p><div class="gantt"><b style="left:25%;width:25%"></b></div></div></div>
+      <div class="phase"><div class="wk">Semanas 7–12<small>propuesta C</small></div><div><h4>La lupa</h4><p>Cuando lleguen el libro de egresos y las remuneraciones por función.</p><div class="gantt"><b style="left:50%;width:50%"></b></div></div></div>
+    </div>
+
+    <div class="tscroll" style="margin-top:56px">
+      <table class="mtable">
+        <thead><tr><th></th><th><span>A</span>El viaje de un peso</th><th><span>B</span>Ficha de salud</th><th><span>C</span>La lupa</th></tr></thead>
+        <tbody>
+          <tr><th>Formato</th><td>Landing narrativa por RBD</td><td>Una hoja en web, PDF e imagen</td><td>Explorador web interactivo</td></tr>
+          <tr><th>Público</th><td>Comunidad escolar, consejo, apoderados</td><td>Director/a y equipo de gestión</td><td>Profesional de gestión y sostenedor</td></tr>
+          <tr><th>Frecuencia</th><td>Semestral o anual</td><td>Mensual</td><td>Permanente</td></tr>
+          <tr><th>Datos nuevos</th><td>Matrícula</td><td>Ninguno</td><td>Libro de egresos y remuneraciones</td></tr>
+          <tr><th>Esfuerzo</th><td>3 a 4 semanas</td><td>1 a 2 semanas</td><td>6 a 8 semanas</td></tr>
+          <tr><th>Lo que logra</th><td>Que la comunidad entienda y se involucre</td><td>Decisiones rápidas cada mes</td><td>Respuestas detalladas en vivo</td></tr>
+          <tr><th>Riesgo</th><td>Leerse como propaganda</td><td>Semáforos mal calibrados</td><td>Datos desordenados</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p class="eyebrow" style="color:var(--accent)">Recomendación</p>
+      <h3>Partiría por B y dejaría A lista para diciembre</h3>
+      <p>La ficha usa el Excel que ya existe, se entrega cada mes y obliga a ordenar el modelo de datos. Con ese modelo, la historia sale casi sin trabajo extra para las reuniones de cierre de año. La lupa conviene cuando el detalle contable esté disponible; antes de eso, solo tendría dos niveles.</p>
+    </div>
+
+    <div class="learn">
+      <div>
+        <h3>Lo que tomé de algoritmospublicos.cl</h3>
+        <p class="src">Revisado en el navegador: Next.js con Tailwind, tipografía MADE Tommy, paleta casi negra y blanco hueso con rosa ceniza.</p>
+        <div class="pairs">
+          <div class="pair"><span class="from">Nav píldora negra flotante, con la sección activa resaltada</span><span class="to">La misma navegación para moverse entre Red, Mi escuela y Datos</span></div>
+          <div class="pair"><span class="from">Portada dividida en dos puertas: Herramientas y Repositorio</span><span class="to">Dos puertas: la red completa y mi establecimiento</span></div>
+          <div class="pair"><span class="from">Titulares en dos tonos</span><span class="to">Frase en negro y la idea clave en el color de acento</span></div>
+          <div class="pair"><span class="from">Buscador con filtros por gasto funcional, región e institución</span><span class="to">Buscador por RBD o nombre, con filtros por subvención y estado</span></div>
+          <div class="pair"><span class="from">Tarjetas con insignia "Aplicó Herramientas Éticas"</span><span class="to">Tarjetas por escuela con insignias como "SEP bajo el ritmo"</span></div>
+          <div class="pair"><span class="from">Descarga de datos abiertos en CSV y XLSX, y "citar repositorio"</span><span class="to">Fuente, fecha de corte y descarga de la ficha siempre visibles</span></div>
+        </div>
+      </div>
+      <div>
+        <h3>Lo que tomé del video de midudev</h3>
+        <p class="src">"Crea una Landing ESPECTACULAR con Claude Code": una landing de restaurante que se recorre con el scroll como una película.</p>
+        <div class="pairs">
+          <div class="pair"><span class="from">El scroll mueve la cámara: bajar avanza, subir retrocede</span><span class="to">El scroll mueve el peso por los seis actos</span></div>
+          <div class="pair"><span class="from">Astro, GSAP y Lenis para el scroll controlado</span><span class="to">El mismo stack para la propuesta A</span></div>
+          <div class="pair"><span class="from">Un skill de diseño para que la landing no parezca hecha por IA</span><span class="to">Paleta y tipografía propias, validadas para daltonismo</span></div>
+          <div class="pair"><span class="from">Pulir en móvil y medir con Lighthouse</span><span class="to">Revisión automática en Brave con Chrome DevTools MCP</span></div>
+          <div class="pair"><span class="from">Video con IA a partir de seis fotos reales del local</span><span class="to">Opcional: fotos reales de cada escuela, con permiso, para la pantalla 1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup">
+      <div>
+        <h3 style="font-size:1.35rem;margin-bottom:12px">Chrome DevTools MCP con Brave</h3>
+        <ol>
+          <li>Dejé el archivo <b>historia-financiera-ap/.mcp.json</b> apuntando al ejecutable de Brave.</li>
+          <li>Falta <b>Node.js 20.19 o superior</b>: este equipo no lo tiene instalado y el servidor corre con npx.</li>
+          <li>Abre Claude Code en la carpeta <b>historia-financiera-ap</b> y aprueba el servidor <b>chrome-devtools</b> cuando lo pida.</li>
+          <li>Desde ahí puede abrir Brave, navegar, tomar capturas, leer la consola y correr Lighthouse sobre cada página.</li>
+        </ol>
+      </div>
+      <div class="code">
+        <button type="button" id="copy-mcp">Copiar</button>
+<pre id="mcp-code">{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "cmd",
+      "args": [
+        "/c", "npx", "-y", "chrome-devtools-mcp@latest",
+        "--executablePath",
+        "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+      ]
+    }
+  }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Cifras del cuadro de ingresos y gastos de la AP Educación Pública San José de Maipo, corte al 30 de septiembre de 2026. Porcentajes recalculados desde los montos; MM = millones de pesos.</span>
+    <span>Umbrales de semáforo y frases de acción son propuestas para validar con el equipo de gestión.</span>
+  </footer>
+</div>
+
+<div id="tip" hidden></div>
+
+<script>
+(function () {
+  const nf1 = new Intl.NumberFormat('es-CL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const mm = v => '$' + nf1.format(v / 1e6) + ' MM';
+  const pc = v => nf1.format(v) + '%';
+
+  /* ---------- tooltip ---------- */
+  const tip = document.getElementById('tip');
+  function showTip(el) {
+    tip.textContent = el.dataset.tip;
+    tip.hidden = false;
+    const r = el.getBoundingClientRect();
+    const w = tip.offsetWidth;
+    let x = r.left + r.width / 2;
+    x = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8, x));
+    tip.style.left = x + 'px';
+    tip.style.top = Math.max(r.top, tip.offsetHeight + 18) + 'px';
+  }
+  document.addEventListener('pointerover', e => {
+    const t = e.target.closest('[data-tip]');
+    if (t) showTip(t); else tip.hidden = true;
+  });
+  document.addEventListener('focusin', e => { const t = e.target.closest('[data-tip]'); if (t) showTip(t); });
+  document.addEventListener('focusout', () => { tip.hidden = true; });
+  window.addEventListener('scroll', () => { tip.hidden = true; }, { passive: true });
+
+  /* ---------- Acto II: unidades ---------- */
+  const UNIT = {
+    red: { big: '$122,6', note: 'Red AP: $4.971,7 MM gastados sobre $4.054,3 MM recibidos. Los 23 cuadros bajo la línea son lo que faltó.',
+      parts: [['sueldos', 'Sueldos', 105, '$104,4'], ['compras', 'Compras', 16, '$16,3'], ['honor', 'Honorarios', 2, '$2,0']] },
+    esc: { big: '$110,2', note: 'El Melocotón: $423,9 MM gastados sobre $384,5 MM recibidos. Mejor que la red, pero 10 cuadros bajo la línea.',
+      parts: [['sueldos', 'Sueldos', 91, '$90,9'], ['compras', 'Compras', 18, '$18,7'], ['honor', 'Honorarios', 1, '$0,7']] }
+  };
+  function cells(scope) {
+    const out = [];
+    UNIT[scope].parts.forEach(([k, name, n, v]) => { for (let i = 0; i < n; i++) out.push([k, name, v]); });
+    return out;
+  }
+  function renderUnit(scope) {
+    const u = UNIT[scope];
+    const grid = document.getElementById('unit-grid');
+    grid.innerHTML = '';
+    cells(scope).forEach(([k, name, v], i) => {
+      if (i === 100) {
+        const lim = document.createElement('div');
+        lim.className = 'limit';
+        lim.innerHTML = '<span>Hasta aquí alcanzan los $100</span>';
+        grid.appendChild(lim);
+      }
+      const c = document.createElement('i');
+      c.className = 'c f-' + k + (i >= 100 ? ' over' : '');
+      c.dataset.tip = name + ': ' + v + ' de cada $100 recibidos' + (i >= 100 ? ' · sobre el límite' : '');
+      grid.appendChild(c);
+    });
+    grid.setAttribute('aria-label', 'De cada 100 pesos recibidos se gastan ' + u.big.replace('$', '') + ' pesos: ' + u.parts.map(p => p[1] + ' ' + p[3]).join(', '));
+    document.getElementById('unit-legend').innerHTML = u.parts.map(([k, name, , v]) => '<span><i class="sw f-' + k + '"></i>' + name + ' <b class="num">' + v + '</b></span>').join('');
+    document.getElementById('unit-big').textContent = u.big;
+    document.getElementById('unit-note').textContent = u.note;
+    document.querySelectorAll('#fig-unit .seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.scope === scope)));
+  }
+  document.querySelectorAll('#fig-unit .seg button').forEach(b => b.addEventListener('click', () => renderUnit(b.dataset.scope)));
+  renderUnit('red');
+
+  // mini grid del storyboard (El Melocotón)
+  const mini = document.getElementById('mini-grid');
+  cells('esc').forEach(([k], i) => {
+    if (i === 100) { const l = document.createElement('span'); l.className = 'lim'; mini.appendChild(l); }
+    const c = document.createElement('i'); c.className = 'f-' + k; mini.appendChild(c);
+  });
+
+  /* ---------- Acto V: pesas ---------- */
+  const DB = [
+    ['Sueldos sobre ingresos', 'total', 90.89, 104.38],
+    ['Ejecución total', 'gasto ÷ ingreso', 110.23, 122.63],
+    ['Ejecución SEP', 'al 75% del año', 33.89, 46.72],
+    ['Ejecución PIE', '', 88.41, 115.74],
+    ['Sueldos en General', 'sobre su ingreso', 219.84, 186.22]
+  ];
+  const MAX = 250, X = v => (v / MAX * 100).toFixed(2) + '%';
+  const db = document.getElementById('dumbbell');
+  let html = '<div class="row head"><span class="lab"></span><div class="axis num">' +
+    [0, 50, 100, 150, 200, 250].map(t => '<span' + (t === 100 ? ' class="mark"' : '') + ' style="left:' + X(t) + '">' + t + '%</span>').join('') +
+    '</div><span class="val"></span></div>';
+  DB.forEach(([lab, sub, e, r]) => {
+    const lo = Math.min(e, r), hi = Math.max(e, r);
+    html += '<div class="row"><span class="lab">' + lab + (sub ? '<small>' + sub + '</small>' : '') + '</span>' +
+      '<div class="track"><i class="ref soft" style="left:' + X(100) + '"></i>' +
+      '<i class="link" style="left:' + X(lo) + ';width:calc(' + X(hi) + ' - ' + X(lo) + ')"></i>' +
+      '<i class="dot red" style="left:' + X(r) + '" data-tip="Red AP · ' + lab + ': ' + pc(r) + '" tabindex="0"></i>' +
+      '<i class="dot esc" style="left:' + X(e) + '" data-tip="El Melocotón · ' + lab + ': ' + pc(e) + '" tabindex="0"></i></div>' +
+      '<span class="val"><b>' + pc(e) + '</b><br>red ' + pc(r) + '</span></div>';
+  });
+  db.innerHTML = html;
+
+  /* ---------- Ficha (propuesta B) ---------- */
+  const ICON = {
+    good: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="var(--good)"/><path d="M4.6 8.2 7 10.5l4.4-4.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    warn: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2 15.2 14H.8Z" fill="var(--warn)"/><path d="M8 6v3.6" stroke="#12171d" stroke-width="1.7" stroke-linecap="round"/><circle cx="8" cy="11.7" r="1" fill="#12171d"/></svg>',
+    crit: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.1 1h5.8L15 5.1v5.8L10.9 15H5.1L1 10.9V5.1Z" fill="var(--crit)"/><path d="m5.5 5.5 5 5m0-5-5 5" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>'
+  };
+  const LBL = { good: 'Sano', warn: 'Atención', crit: 'Crítico' };
+  const FICHA = [
+    ['Sueldos sobre ingresos', '90,9%', '104,4%', 'warn'],
+    ['Ejecución total', '110,2%', '122,6%', 'crit'],
+    ['Ejecución SEP (año al 75%)', '33,9%', '46,7%', 'crit'],
+    ['Ejecución PIE', '88,4%', '115,7%', 'good'],
+    ['Cobertura de la Subvención General', '36,8%', '44,1%', 'crit']
+  ];
+  document.getElementById('ficha-rows').innerHTML = FICHA.map(([n, e, r, s]) =>
+    '<tr><td>' + n + '</td><td class="r"><b>' + e + '</b></td><td class="r">' + r + '</td><td><span class="status">' + ICON[s] + LBL[s] + '</span></td></tr>').join('');
+  const FB = [['SEP', 'sep', 26.93], ['PIE', 'pie', 87.90], ['General', 'general', 219.84]];
+  document.getElementById('ficha-bars').innerHTML =
+    '<div class="row head"><span class="lab"></span><div class="axis num"><span style="left:0">0%</span><span class="mark" style="left:40%">100%</span><span style="left:100%">250%</span></div><span class="val"></span></div>' +
+    FB.map(([n, k, v]) => '<div class="row"><span class="lab">' + n + '</span><div class="track"><div class="bar f-' + k + '" style="width:' + (v / 250 * 100).toFixed(2) + '%" data-tip="' + n + ': ' + pc(v) + ' de su ingreso en sueldos" tabindex="0"></div><i class="ref" style="left:40%"></i></div><span class="val"><b>' + pc(v) + '</b></span></div>').join('');
+
+  /* ---------- Lupa (propuesta C) ---------- */
+  const SUBS = {
+    general: 'Subvención General', bonif: 'Bonificaciones e incrementos', sep: 'SEP', pie: 'PIE', otros: 'Otros fondos'
+  };
+  const TYPES = [['sueldos', 'Sueldos'], ['compras', 'Compras'], ['honor', 'Honorarios']];
+  const LUPA = {
+    red: { name: 'Red AP', items: [
+      { k: 'general', ing: 1674904108, t: { sueldos: 3118942289, compras: 615579079, honor: 62499848 } },
+      { k: 'bonif', ing: 1149712886, t: { sueldos: 178490782, compras: 0, honor: 0 } },
+      { k: 'sep', ing: 706204442, t: { sueldos: 283604509, compras: 41904354, honor: 4465097 } },
+      { k: 'pie', ing: 465858812, t: { sueldos: 537006702, compras: 506864, honor: 1651917 } },
+      { k: 'otros', ing: 57621676, noExec: true, note: 'FAEP 2025, Reactivación, Mantenimiento y Pro Retención', t: { sueldos: 113982646, compras: 1339422, honor: 11695512 } }
+    ] },
+    esc: { name: 'El Melocotón', items: [
+      { k: 'general', ing: 131111723, t: { sueldos: 288236029, compras: 67913279, honor: 550000 } },
+      { k: 'bonif', ing: 136390180, t: { sueldos: 0, compras: 0, honor: 0 } },
+      { k: 'sep', ing: 64282967, t: { sueldos: 17312573, compras: 3705783, honor: 768584 } },
+      { k: 'pie', ing: 50010253, t: { sueldos: 43959959, compras: 40761, honor: 213151 } },
+      { k: 'otros', ing: 2753726, note: 'Mantenimiento y Pro Retención', t: { sueldos: 0, compras: 62683, honor: 1128382 } }
+    ] }
+  };
+  const NEXT = {
+    sueldos: { need: 'la planilla de remuneraciones por función', eg: ['Docentes de aula', 'Directivos y técnico-pedagógicos', 'Asistentes de la educación', 'Profesionales PIE', 'Reemplazos y licencias'] },
+    compras: { need: 'el libro de egresos con cuenta y proveedor', eg: ['Materiales de enseñanza', 'Servicios básicos', 'Mantención y reparaciones', 'Equipamiento y TIC', 'Alimentación y transporte'] },
+    honor: { need: 'el libro de egresos con boletas de honorarios', eg: ['Talleres y monitores', 'Profesionales de apoyo', 'Asesorías técnicas'] }
+  };
+  const st = { scope: 'red', sub: null, type: null };
+  const gasto = it => it.t.sueldos + it.t.compras + it.t.honor;
+  const el = id => document.getElementById(id);
+
+  function crumbs() {
+    const parts = [[LUPA[st.scope].name, () => { st.sub = null; st.type = null; }]];
+    if (st.sub) parts.push([SUBS[st.sub], () => { st.type = null; }]);
+    if (st.type) parts.push([TYPES.find(t => t[0] === st.type)[1], null]);
+    const nav = el('lupa-crumbs');
+    nav.innerHTML = '';
+    parts.forEach(([txt, fn], i) => {
+      if (i) { const s = document.createElement('span'); s.className = 'sepc'; s.textContent = '›'; nav.appendChild(s); }
+      if (i === parts.length - 1) { const s = document.createElement('span'); s.className = 'cur'; s.textContent = txt; nav.appendChild(s); }
+      else { const b = document.createElement('button'); b.type = 'button'; b.id = 'crumb-' + i; b.textContent = txt; b.addEventListener('click', () => { fn(); renderLupa(); }); nav.appendChild(b); }
+    });
+  }
+  function seg(cls, val, tipTxt, onClick, id) {
+    const b = document.createElement(onClick ? 'button' : 'div');
+    if (onClick) { b.type = 'button'; b.addEventListener('click', onClick); b.id = id; }
+    b.className = cls; b.style.flex = val + ' 1 0px'; b.dataset.tip = tipTxt;
+    if (!onClick) b.tabIndex = 0;
+    return b;
+  }
+  function renderLupa() {
+    const D = LUPA[st.scope];
+    document.querySelectorAll('#lupa .seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.scope === st.scope)));
+    crumbs();
+    const bar = el('lupa-bar'), list = el('lupa-list'), total = el('lupa-total');
+    bar.innerHTML = ''; list.innerHTML = '';
+    bar.hidden = false;
+
+    if (!st.sub) {
+      const T = D.items.reduce((a, it) => a + gasto(it), 0);
+      total.innerHTML = '<b class="num">' + mm(T) + '</b>gasto total ene–sep · elige una fuente';
+      D.items.filter(it => gasto(it) > 0).forEach(it =>
+        bar.appendChild(seg('f-' + it.k, gasto(it), SUBS[it.k] + ' · ' + mm(gasto(it)) + ' · ' + pc(gasto(it) / T * 100), () => { st.sub = it.k; renderLupa(); }, 'lseg-' + it.k)));
+      let h = '<div class="lhead"><span></span><span>Fuente</span><span>Gasto</span><span>% del gasto</span><span>Ejecución</span></div><div class="lrows">';
+      D.items.forEach(it => {
+        const g = gasto(it);
+        h += '<button type="button" class="lrow" id="lrow-' + it.k + '" data-k="' + it.k + '"><i class="sw f-' + it.k + '"></i><span class="nm">' + SUBS[it.k] + (it.note ? '<small>' + it.note + '</small>' : '') + (g === 0 ? '<small>' + mm(it.ing) + ' recibidos sin gasto asignado</small>' : '') + '</span>' +
+          '<span class="v">' + mm(g) + '</span><span class="v dim">' + pc(g / T * 100) + '</span><span class="v dim">' + (it.noExec ? '—' : pc(g / it.ing * 100)) + '</span></button>';
+      });
+      list.innerHTML = h + '</div>';
+      list.querySelectorAll('.lrow').forEach(b => b.addEventListener('click', () => { st.sub = b.dataset.k; renderLupa(); }));
+      return;
+    }
+
+    const it = D.items.find(x => x.k === st.sub), G = gasto(it);
+    if (!st.type) {
+      total.innerHTML = '<b class="num">' + mm(G) + '</b>gastados en ' + SUBS[st.sub] + ' · ' + mm(it.ing) + ' recibidos';
+      if (G === 0) {
+        bar.hidden = true;
+        list.innerHTML = '<div class="locked"><h4>Sin gastos imputados</h4><p>' + SUBS[st.sub] + ' registra ' + mm(it.ing) + ' de ingreso y ningún gasto en ' + D.name + '. Es la primera pregunta para la reunión: ¿qué sueldos financia este dinero?</p></div>';
+        return;
+      }
+      TYPES.filter(([k]) => it.t[k] > 0).forEach(([k, n]) =>
+        bar.appendChild(seg('f-' + k, it.t[k], n + ' · ' + mm(it.t[k]) + ' · ' + pc(it.t[k] / G * 100), () => { st.type = k; renderLupa(); }, 'lseg-' + k)));
+      let h = '<div class="lhead"><span></span><span>Tipo de gasto</span><span>Monto</span><span>% de la fuente</span><span>Por cada $100</span></div><div class="lrows">';
+      TYPES.forEach(([k, n]) => {
+        const v = it.t[k];
+        h += '<button type="button" class="lrow" id="lrow-' + k + '" data-k="' + k + '"' + (v === 0 ? ' disabled' : '') + '><i class="sw f-' + k + '"></i><span class="nm">' + n + '</span>' +
+          '<span class="v">' + mm(v) + '</span><span class="v dim">' + pc(v / G * 100) + '</span><span class="v dim">' + (it.noExec ? '—' : '$' + nf1.format(v / it.ing * 100)) + '</span></button>';
+      });
+      list.innerHTML = h + '</div><p class="source" style="margin-top:8px">"Por cada $100" compara el gasto con lo que esta fuente recibió en el período.</p>';
+      list.querySelectorAll('.lrow:not([disabled])').forEach(b => b.addEventListener('click', () => { st.type = b.dataset.k; renderLupa(); }));
+      return;
+    }
+
+    const v = it.t[st.type], n = TYPES.find(t => t[0] === st.type)[1], nx = NEXT[st.type];
+    bar.hidden = true;
+    total.innerHTML = '<b class="num">' + mm(v) + '</b>en ' + n.toLowerCase() + ' · ' + SUBS[st.sub] + ' · ' + D.name;
+    list.innerHTML = '<div class="locked"><h4>El siguiente nivel necesita ' + nx.need + '</h4>' +
+      '<p>Con ese dato, esta vista mostraría en qué se fueron los ' + mm(v) + ', ordenado de mayor a menor, con los gastos pequeños agrupados al final para poder abrirlos uno a uno.</p>' +
+      '<div class="ghosts">' + nx.eg.map(x => '<div class="ghost"><span>' + x + '</span><i></i></div>').join('') + '</div>' +
+      '<p class="source">Categorías de ejemplo, sin montos: se reemplazan por las cuentas reales de rendición.</p></div>';
+  }
+  document.querySelectorAll('#lupa .seg button').forEach(b => b.addEventListener('click', () => { st.scope = b.dataset.scope; st.sub = null; st.type = null; renderLupa(); }));
+  renderLupa();
+
+  /* ---------- nav activa ---------- */
+  const links = [...document.querySelectorAll('.pill-links a')];
+  const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(l => l.removeAttribute('aria-current'));
+          const a = byId.get(en.target.id);
+          if (a) {
+            a.setAttribute('aria-current', 'true');
+            const box = a.parentElement;
+            if (box.scrollWidth > box.clientWidth) box.scrollLeft = a.offsetLeft - box.offsetLeft - 24;
+          }
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    byId.forEach((a, id) => { const s = document.getElementById(id); if (s) io.observe(s); });
+  }
+
+  /* ---------- copiar ---------- */
+  const copyBtn = document.getElementById('copy-mcp');
+  copyBtn.addEventListener('click', () => {
+    const code = document.getElementById('mcp-code');
+    const done = t => { copyBtn.textContent = t; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1800); };
+    navigator.clipboard.writeText(code.textContent).then(() => done('Copiado'), () => {
+      const r = document.createRange(); r.selectNodeContents(code);
+      const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      done('Seleccionado: usa Ctrl+C');
+    });
+  });
+})();
+</script>
